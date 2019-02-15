@@ -1,0 +1,12 @@
+.required,
+.error {
+  text-align: left;
+}
+.required > input,
+.error > input {
+  border-color: red !important;
+}
+.required > span,
+.error > span {
+  color: red;
+}

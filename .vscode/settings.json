@@ -1,0 +1,15 @@
+{
+  "editor.tabSize": 2,
+  "editor.detectIndentation": true,
+  "prettier.singleQuote": true,
+  "editor.tabCompletion": true,
+  "editor.formatOnSave": true,
+  // Use 'prettier-eslint' instead of 'prettier'. Other settings will only be fallbacks in case they could not be inferred from eslint rules.
+  "prettier.eslintIntegration": true,
+  "window.zoomLevel": 0,
+  "typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+  "javascript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+  "auto-close-tag.SublimeText3Mode": true,
+  "vs-color-picker.autoLaunch": true,
+  "files.autoSave": false
+}
