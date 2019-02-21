@@ -108,7 +108,7 @@ const SidebarWrapper = styled.div`
       }
 
       .ant-menu-item-selected {
-        background-color: rgba(0, 0, 0, 0.4) !important;
+        background-color: red !important;
         .anticon {
           color: #fff;
         }
@@ -131,9 +131,17 @@ const SidebarWrapper = styled.div`
         }
       }
     }
-
+    .ant-menu-inline {
+      width: 105% !important;
+    }
     .ant-menu-dark .ant-menu-inline.ant-menu-sub {
       background: ${palette('secondary', 5)};
+    }
+    .ant-menu-dark {
+      background: #4482ff !important;
+    }
+    .ant-menu-item-selected {
+      background: #145776 !important;
     }
 
     .ant-menu-submenu-inline,

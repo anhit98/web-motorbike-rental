@@ -5,11 +5,19 @@ import { login } from './login/reducer';
 import { loading } from './loading/reducer';
 import LanguageSwitcher from './languageSwitcher/reducer';
 import App from './app/reducer';
+import { motortypes } from './motorbiketype/reducer';
+import { toggleModals } from './toggleModal/reducer';
+import { togglemodal } from './modals/reducer';
+import { renters } from './renters/reducer';
 
 export default combineReducers({
   router: routerReducer,
   login,
+  motortypes,
   loading,
+  toggleModals,
+  togglemodal,
+  renters,
   notifications,
   LanguageSwitcher,
   App,

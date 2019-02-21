@@ -1,6 +1,8 @@
 {
   "sidebar.dashboard": "Dashboard",
+  "sidebar.motorbiketype": "Quản lí loại xe",
   "sidebar.bookings": "Quản lý thuê xe",
+  "sidebar.renter": "Quản lí khách hàng",
   "sidebar.paymentManage": "Quản lý thanh toán",
   "sidebar.renters": "Quản lý khách hàng",
   "sidebar.rooms": "Quản lý danh mục",
