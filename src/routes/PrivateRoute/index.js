@@ -35,9 +35,16 @@ const authorizedRoutes = [
     }),
   },
   {
-    path: '/motorbike',
+    path: '/loai-xe',
     component: Loadable({
-      loader: () => import('../../containers/Motorbike'),
+      loader: () => import('../../containers/MotorbikeType'),
+      loading: Loading,
+    }),
+  },
+  {
+    path: '/khach-hang',
+    component: Loadable({
+      loader: () => import('../../containers/Renter'),
       loading: Loading,
     }),
   },
