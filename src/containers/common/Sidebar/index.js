@@ -27,6 +27,12 @@ const listMenu = [
     icon: 'anticon anticon-pie-chart',
     text: 'sidebar.dashboard',
   },
+  {
+    key: 'motorbike',
+    url: '/motorbike',
+    icon: 'anticon anticon-pie-chart',
+    text: 'sidebar.motorbike',
+  },
 ];
 
 class Sidebar extends Component {

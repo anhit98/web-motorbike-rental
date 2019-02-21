@@ -34,6 +34,13 @@ const authorizedRoutes = [
       loading: Loading,
     }),
   },
+  {
+    path: '/motorbike',
+    component: Loadable({
+      loader: () => import('../../containers/Motorbike'),
+      loading: Loading,
+    }),
+  },
 ];
 
 class PrivateRoute extends Component {

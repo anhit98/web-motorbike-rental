@@ -5,6 +5,7 @@ import { login } from './login/reducer';
 import { loading } from './loading/reducer';
 import LanguageSwitcher from './languageSwitcher/reducer';
 import App from './app/reducer';
+import { motorbike } from './motorbike/reducer';
 
 export default combineReducers({
   router: routerReducer,
@@ -13,4 +14,5 @@ export default combineReducers({
   notifications,
   LanguageSwitcher,
   App,
+  motorbike,
 });
