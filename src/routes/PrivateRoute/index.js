@@ -51,7 +51,7 @@ const authorizedRoutes = [
 ];
 
 class PrivateRoute extends Component {
-  componentDidMount() {}
+  componentDidMount() { }
   render() {
     const { match } = this.props;
     return (

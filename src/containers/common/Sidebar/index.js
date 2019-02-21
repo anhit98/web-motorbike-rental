@@ -15,6 +15,7 @@ import { rtl } from '../../../config/withDirection';
 const SubMenu = Menu.SubMenu;
 const { Sider } = Layout;
 const customizedTheme = getCurrentTheme('sidebarTheme', 'themedefault');
+
 // const stripTrailingSlash = str => {
 //   if (str.substr(-1) === '/') {
 //     return str.substr(0, str.length - 1);
