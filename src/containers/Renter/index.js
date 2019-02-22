@@ -23,26 +23,41 @@ class Renter extends Component {
         title: 'Họ và tên',
         dataIndex: 'username',
         key: 'username',
+        render: (value, record) => {
+          return <p>{record.user_id.username}</p>;
+        },
       },
       {
         title: 'Tuổi',
         dataIndex: 'age',
         key: 'age',
+        render: (value, record) => {
+          return <p>{record.user_id.age}</p>;
+        },
       },
       {
         title: 'Số điện thoại',
         dataIndex: 'phoneNumber',
         key: 'phoneNumber',
+        render: (value, record) => {
+          return <p>{record.user_id.phoneNumber}</p>;
+        },
       },
       {
         title: 'Email',
         dataIndex: 'email',
         key: 'email',
+        render: (value, record) => {
+          return <p>{record.user_id.email}</p>;
+        },
       },
       {
         title: 'Ảnh đại diện',
         dataIndex: 'avatar',
         key: 'avatar',
+        render: (value, record) => {
+          return <p>{record.user_id.avatar}</p>;
+        },
       },
     ];
     return (
