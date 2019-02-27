@@ -6,7 +6,6 @@ export const initialState = {
 };
 
 const fetchListMotorbike = (state, action) => {
-  console.log(action.data, "au");
 
   return {
     ...state,
@@ -41,7 +40,7 @@ const delListMotorbike = (state, action) => {
 };
 export const motorbike = makeReducerCreator(initialState, {
   [Motorbike.FETCH_MOTORBIKE]: fetchListMotorbike,
-  [Motorbike.ADD_Motorbike]: addListMotorbike,
-  [Motorbike.EDIT_Motorbike]: editListMotorbike,
-  [Motorbike.DEL_Motorbike]: delListMotorbike,
+  [Motorbike.ADD_MOTORBIKE]: addListMotorbike,
+  [Motorbike.EDIT_MOTORBIKE]: editListMotorbike,
+  [Motorbike.DEL_MOTORBIKE]: delListMotorbike,
 });
