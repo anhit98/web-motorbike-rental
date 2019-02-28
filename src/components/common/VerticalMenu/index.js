@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import appIcon from '../../../assets/images/app-icon.png';
+import appIcon from '../../../assets/images/admin.png';
 import './index.css';
 
 const listMenu = [

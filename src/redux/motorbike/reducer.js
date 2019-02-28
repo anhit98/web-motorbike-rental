@@ -6,7 +6,6 @@ export const initialState = {
 };
 
 const fetchListMotorbike = (state, action) => {
-
   return {
     ...state,
     listMotorbike: action.data,
@@ -24,8 +23,8 @@ const editListMotorbike = (state, action) => {
   return {
     ...state,
     listMotorbike: [
-      ...state.listMotorbike.map(
-        object => (object.objectId === action.data.objectId ? action.data : object),
+      ...state.listMotorbike.map(object =>
+        object.objectId === action.data.objectId ? action.data : object,
       ),
     ],
     isMotorbikeFormOpen: false,

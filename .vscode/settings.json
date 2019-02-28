@@ -11,5 +11,6 @@
   "javascript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
   "auto-close-tag.SublimeText3Mode": true,
   "vs-color-picker.autoLaunch": true,
-  "files.autoSave": false
+  "files.autoSave": false,
+  "files.eol": "\n"
 }

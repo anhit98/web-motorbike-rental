@@ -4,16 +4,17 @@ import { makeReducerCreator } from '../reduxCreator';
 export const initialState = {
   isAuthenticated: false,
   roles: '',
+  shop_id: '',
   loginError: false,
   loginSuccess: false,
   listCurents: {},
 };
 
 const curent = (state, action) => {
-  console.log('Action data', action.data);
   return {
     ...state,
     listCurents: action.data,
+    shop_id: action.data.shop_id,
   };
 };
 
