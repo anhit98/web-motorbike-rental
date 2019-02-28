@@ -5,6 +5,7 @@ import {
   fetchListOrder,
   updateListOrder,
   updateListMotor,
+  deleteListOrder,
 
 } from './actions';
 import { fetchListMotorbikeThunk } from '../../redux/motorbike/thunks';
@@ -45,6 +46,17 @@ export function updateListMotorbikeThunk(data, id) {
       .catch();
   };
 }
+
+export function deleteListOrderThunk(data) {
+  return dispatch => {
+    apiWrapper(dispatch, del(`/classes/order/${data.objectId}`))
+      .then(() => {
+        dispatch(deleteListOrder(data));
+      })
+      .catch();
+  };
+}
+
 
 
 

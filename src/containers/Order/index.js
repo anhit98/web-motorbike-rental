@@ -5,7 +5,7 @@ import { Table, Button, Input, Icon, Popconfirm, Tag } from 'antd';
 import PageHeader from '../../components/utility/PageHeader';
 import LayoutWrapper from '../../components/utility/LayoutWrapper';
 import IntlMessages from '../../components/utility/intlMessages';
-import { fetchListOrderThunk, updateListOrderThunk, updateListMotorbikeThunk } from '../../redux/order/thunks';
+import { fetchListOrderThunk, updateListOrderThunk, updateListMotorbikeThunk, deleteListOrderThunk } from '../../redux/order/thunks';
 import OrderStyle from './style';
 import { toggleModal } from './../../redux/modals/actions';
 import _ from 'lodash';
@@ -183,15 +183,14 @@ class Order extends Component {
         render: (value, record) => (
           <div>
             <span>
-              <Button
-                style={{ width: 65 }}
-                className="iconEdit"
-                type="primary"
-                title="Chỉnh sửa"
-                onClick={() => {
-                  this.showModalEdit(record);
-                }}
-              >Trả xe</Button>
+              <Popconfirm
+                title="Bạn có chắc chắn không?"
+                onConfirm={() => this.handleDelete(record)}
+                okText="Đồng ý"
+                cancelText="Trả xe"
+              >
+                <Button style={{ width: 65 }} type="primary">Trả xe</Button>
+              </Popconfirm>
             </span>
 
             <span>
@@ -231,6 +230,47 @@ class Order extends Component {
         className: 'motorbike',
         objectId: data.motor_id.objectId,
       },
+      shop_id: data.shop_id,
+      user_id: {
+        __type: 'Pointer',
+        className: '_User',
+        objectId: data.user_id.objectId,
+      },
+      is_shipping: data.is_shipping,
+      is_cancel: true,
+      total_days_rented: data.total_days_rented,
+      is_finished: data.is_finished,
+      total_price: data.total_price,
+
+    };
+    this.props.updateListMotor(data);
+    const newMotor = {
+
+      motorbikeType_id: data.motor_id.motorbikeType_id,
+      shop_id: data.shop_id,
+      name: data.motor_id.name,
+      is_available: true,
+      license_plate: data.motor_id.license_plate,
+      image: data.motor_id.image,
+      description: data.motor_id.description,
+      rent_price: data.motor_id.rent_price,
+
+    };
+    console.log(data, "owudrjdfksudowids");
+    this.props.updateListOrder(newValues, data.objectId);
+    this.props.updateListMotor(newMotor, data.motor_id.objectId);
+  };
+
+  handleDelete = data => {
+    this.props.deleteListOrder(data);
+    console.log(data, "khong ai biet");
+    const newPayment = {
+
+      motor_id: {
+        __type: 'Pointer',
+        className: 'motorbike',
+        objectId: data.motor_id.objectId,
+      },
       shop_id: {
         __type: 'Pointer',
         className: 'shop',
@@ -248,31 +288,10 @@ class Order extends Component {
       total_price: data.total_price,
 
     };
-    this.props.updateListMotor(data);
-    const newMotor = {
 
-      motorbikeType_id: {
-        __type: 'Pointer',
-        className: 'motorbikeType',
-        objectId: data.motor_id.motorbikeType_id,
-      },
-      shop_id: {
-        __type: 'Pointer',
-        className: 'shop',
-        objectId: data.motor_id.shop_id,
-      },
+    console.log(data, "data data data");
+    this.props.deleteListOrder(newPayment, data.objectId);
 
-      name: data.motor_id.name,
-      is_available: true,
-      license_plate: data.motor_id.license_plate,
-      image: data.motor_id.image,
-      description: data.motor_id.description,
-      rent_price: data.motor_id.rent_price,
-
-    };
-    console.log(data, "owudrjdfksudowids");
-    this.props.updateListOrder(newValues, data.objectId);
-    this.props.updateListMotor(newMotor, data.motor_id.objectId);
   };
 
   render() {
@@ -304,6 +323,7 @@ Order.propTypes = {
   listOrder: PropTypes.array,
   updateListOrder: PropTypes.func,
   updateListMotor: PropTypes.func,
+  deleteListOrder: PropTypes.func,
 
 };
 
@@ -326,6 +346,9 @@ export default connect(
       },
       updateListMotor: (data, id) => {
         dispatch(updateListMotorbikeThunk(data, id));
+      },
+      deleteListOrder: (data, id) => {
+        dispatch(deleteListOrderThunk(data, id));
       },
 
 
