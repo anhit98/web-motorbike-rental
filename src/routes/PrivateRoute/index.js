@@ -42,6 +42,28 @@ const authorizedRoutes = [
       loading: Loading,
     }),
   },
+  {
+    path: '/xe-may',
+    component: Loadable({
+      loader: () => import('../../containers/Motorbike'),
+      loading: Loading,
+    }),
+  },
+  {
+    path: '/thanh-toan',
+    component: Loadable({
+      loader: () => import('../../containers/Payment'),
+      loading: Loading,
+    }),
+  },
+  {
+    path: '/don-dat-hang',
+    component: Loadable({
+      loader: () => import('../../containers/Order'),
+      loading: Loading,
+    }),
+  },
+
 ];
 
 class PrivateRoute extends Component {

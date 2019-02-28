@@ -101,6 +101,37 @@ class Sidebar extends Component {
                   </span>
                 </Link>
               </Menu.Item>
+              <Menu.Item key="sub4">
+                <Link to={'/xe-may'}>
+                  <span className="isoMenuHolder" style={submenuColor}>
+                    <i className="anticon anticon-star" />
+                    <span className="nav-text">
+                      <IntlMessages id="sidebar.motorbike" />
+                    </span>
+                  </span>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="sub5">
+                <Link to={'/don-dat-hang'}>
+                  <span className="isoMenuHolder" style={submenuColor}>
+                    <i className="anticon anticon-solution" />
+                    <span className="nav-text">
+                      <IntlMessages id="sidebar.order" />
+                    </span>
+                  </span>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="sub6">
+                <Link to={'/thanh-toan'}>
+                  <span className="isoMenuHolder" style={submenuColor}>
+                    <i className="anticon anticon-credit-card" />
+                    <span className="nav-text">
+                      <IntlMessages id="sidebar.payment" />
+                    </span>
+                  </span>
+                </Link>
+              </Menu.Item>
+
               {/* <SubMenu
                 key="sub2"
                 title={

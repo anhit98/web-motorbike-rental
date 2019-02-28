@@ -1,6 +1,7 @@
 {
   "sidebar.dashboard": "Dashboard",
   "sidebar.motorbike": "Motorbike",
+  "sidebar.order": "Order",
   "sidebar.paymentManage": "History of Payment",
   "sidebar.user": "Manage User ",
   "languageSwitcher.label": "Change Language",
