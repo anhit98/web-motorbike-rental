@@ -34,13 +34,7 @@ const authorizedRoutes = [
       loading: Loading,
     }),
   },
-  {
-    path: '/loai-xe',
-    component: Loadable({
-      loader: () => import('../../containers/MotorbikeType'),
-      loading: Loading,
-    }),
-  },
+
   {
     path: '/khach-hang',
     component: Loadable({
@@ -51,7 +45,7 @@ const authorizedRoutes = [
 ];
 
 class PrivateRoute extends Component {
-  componentDidMount() { }
+  componentDidMount() {}
   render() {
     const { match } = this.props;
     return (

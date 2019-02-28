@@ -90,16 +90,7 @@ class Sidebar extends Component {
                   </span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="sub2">
-                <Link to={'/loai-xe'}>
-                  <span className="isoMenuHolder" style={submenuColor}>
-                    <i className="anticon anticon-plus-square" />
-                    <span className="nav-text">
-                      <IntlMessages id="sidebar.motorbiketype" />
-                    </span>
-                  </span>
-                </Link>
-              </Menu.Item>
+
               <Menu.Item key="sub3">
                 <Link to={'/khach-hang'}>
                   <span className="isoMenuHolder" style={submenuColor}>

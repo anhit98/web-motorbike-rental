@@ -5,7 +5,7 @@ import { get } from '../../api/ParseAPI';
 export function loginThunk(username, password) {
   return dispatch => {
     apiWrapper(dispatch, get(`/login?username=${username}&password=${password}`)).then(response => {
-      if (response && response.sessionToken) {
+      if (response && response.sessionToken && response.isAdmin === true) {
         sessionStorage.setItem('sessionToken', response.sessionToken);
         dispatch(login(response));
       }
