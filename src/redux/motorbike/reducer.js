@@ -6,8 +6,6 @@ export const initialState = {
 };
 
 const fetchListMotorbike = (state, action) => {
-  console.log(action.data, "au");
-
   return {
     ...state,
     listMotorbike: action.data,
@@ -25,8 +23,8 @@ const editListMotorbike = (state, action) => {
   return {
     ...state,
     listMotorbike: [
-      ...state.listMotorbike.map(
-        object => (object.objectId === action.data.objectId ? action.data : object),
+      ...state.listMotorbike.map(object =>
+        object.objectId === action.data.objectId ? action.data : object,
       ),
     ],
     isMotorbikeFormOpen: false,
@@ -41,7 +39,7 @@ const delListMotorbike = (state, action) => {
 };
 export const motorbike = makeReducerCreator(initialState, {
   [Motorbike.FETCH_MOTORBIKE]: fetchListMotorbike,
-  [Motorbike.ADD_Motorbike]: addListMotorbike,
-  [Motorbike.EDIT_Motorbike]: editListMotorbike,
-  [Motorbike.DEL_Motorbike]: delListMotorbike,
+  [Motorbike.ADD_MOTORBIKE]: addListMotorbike,
+  [Motorbike.EDIT_MOTORBIKE]: editListMotorbike,
+  [Motorbike.DEL_MOTORBIKE]: delListMotorbike,
 });

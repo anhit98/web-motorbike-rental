@@ -5,9 +5,9 @@ import { login } from './login/reducer';
 import { loading } from './loading/reducer';
 import LanguageSwitcher from './languageSwitcher/reducer';
 import App from './app/reducer';
-
+import { order } from './order/reducer';
 import { motorbike } from './motorbike/reducer';
-
+import { payment } from './payment/reducer';
 import { motortypes } from './motorbiketype/reducer';
 import { toggleModals } from './toggleModal/reducer';
 import { togglemodal } from './modals/reducer';
@@ -26,4 +26,6 @@ export default combineReducers({
   LanguageSwitcher,
   App,
   motorbike,
+  payment,
+  order,
 });
