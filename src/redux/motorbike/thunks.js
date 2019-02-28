@@ -9,17 +9,21 @@ import {
 } from './actions';
 import { toggleModal } from './../modals/actions';
 
-export function fetchListMotorbikeThunk() {
+export function fetchListMotorbikeThunk(id) {
   return dispatch => {
-    apiWrapper(dispatch, get('/classes/motorbike?&include=motorbikeType_id'), false)
+    apiWrapper(
+      dispatch,
+      get(
+        `/classes/motorbike?&include=motorbikeType_id&where={"shop_id":{"__type":"Pointer","className":"shop","objectId":"${id}"}}`,
+      ),
+      false,
+    )
       .then(data => {
-
         dispatch(fetchListMotorbike(data.results));
         const motorbikesID = _.map(data.results, item => {
           return `${item.objectId}`;
         });
         const query = JSON.stringify({ motorbikeID: { $in: motorbikesID } });
-
       })
       .catch(err => {
         console.log(err);
@@ -27,45 +31,33 @@ export function fetchListMotorbikeThunk() {
   };
 }
 
-export function fetchCurrrentMotorbikeThunk(id, check = '') {
-  return dispatch => {
-    apiWrapper(dispatch, get(`/classes/motorbike/${id}`))
-      .then(results => {
-        check === '' ? dispatch(addListMotorbike(results)) : dispatch(editListMotorbike(results));
-      })
-      .catch();
-  };
-}
-
-export function addListMotorbikeThunk(value) {
+export function addListMotorbikeThunk(value, id) {
   return dispatch => {
     apiWrapper(dispatch, post('/classes/motorbike', value))
       .then(results => {
-        dispatch(fetchListMotorbikeThunk());
-        // dispatch(fetchCurrrentMotorbikeThunk(results.objectId));
+        dispatch(fetchListMotorbikeThunk(id));
         dispatch(toggleModal('addMotorbikeModal', false));
       })
       .catch();
   };
 }
 
-export function editListMotorbikeThunk(id, value) {
-  console.log(value, "môtrrthnunkkkkkkk");
+export function editListMotorbikeThunk(id, value, shopId) {
+  console.log(value, 'môtrrthnunkkkkkkk');
   return dispatch => {
     apiWrapper(dispatch, put(`/classes/motorbike/${id}`, value))
       .then(() => {
-        // dispatch(fetchCurrrentMotorbikeThunk(id, 'edit'));
-        dispatch(fetchListMotorbikeThunk());
+        dispatch(fetchListMotorbikeThunk(shopId));
         dispatch(toggleModal('editMotorbikeModal', false));
       })
       .catch();
   };
 }
-export function deleteListMotorbikeThunk(data) {
+export function deleteListMotorbikeThunk(data, id) {
   return dispatch => {
     apiWrapper(dispatch, del(`/classes/motorbike/${data.objectId}`))
       .then(() => {
-        dispatch(fetchListMotorbikeThunk());
+        dispatch(fetchListMotorbikeThunk(id));
         dispatch(delListMotorbike(data));
       })
       .catch();

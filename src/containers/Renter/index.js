@@ -16,7 +16,7 @@ class Renter extends Component {
   };
 
   componentDidMount() {
-    this.props.fetchListRenters();
+    this.props.fetchListRenters(this.props.shop_id);
     console.log(this.props.listRenters, 'hiuhiu');
   }
 
@@ -121,18 +121,20 @@ class Renter extends Component {
 Renter.propTypes = {
   fetchListRenters: PropTypes.func,
   listRenters: PropTypes.array,
+  shop_id: PropTypes.string,
 };
 
 export default connect(
   state => {
     return {
+      shop_id: state.login.shop_id,
       listRenters: state.renters.listRenters,
     };
   },
   dispatch => {
     return {
-      fetchListRenters: () => {
-        dispatch(fetchListRentersThunk());
+      fetchListRenters: value => {
+        dispatch(fetchListRentersThunk(value));
       },
     };
   },

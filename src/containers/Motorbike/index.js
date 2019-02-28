@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Table, Button, Input, Icon, Popconfirm, Tag } from 'antd';
+import _ from 'lodash';
+import { Table, Button, Icon, Popconfirm, Tag } from 'antd';
 import PageHeader from '../../components/utility/PageHeader';
 import LayoutWrapper from '../../components/utility/LayoutWrapper';
 import IntlMessages from '../../components/utility/intlMessages';
-import { fetchListMotorbikeThunk, addListMotorbikeThunk, editListMotorbikeThunk, deleteListMotorbikeThunk } from '../../redux/motorbike/thunks';
+import {
+  fetchListMotorbikeThunk,
+  addListMotorbikeThunk,
+  editListMotorbikeThunk,
+  deleteListMotorbikeThunk,
+} from '../../redux/motorbike/thunks';
 import MotorbikeStyle from './style';
 import MotorbikeModal from './../MotorbikeModal/index';
 import { toggleModal } from './../../redux/modals/actions';
 // import { fetchListMotorTypesThunk } from '../../redux/motorbiketype/thunks';
-import _ from 'lodash';
 
 export function formatCurrency(value) {
   if (value) {
@@ -53,12 +58,8 @@ class Motorbike extends Component {
         key: 'motorbikeType_id',
         width: '10%',
         render: (value, record) => {
-
-          return (
-
-            <p>{record.motorbikeType_id.name}</p>
-          );
-        }
+          return <p>{record.motorbikeType_id.name}</p>;
+        },
       },
       {
         title: 'Biển số xe',
@@ -90,9 +91,7 @@ class Motorbike extends Component {
         key: 'is_available',
         width: '10%',
         render: value => {
-
           if (value === true) {
-
             return <Tag color="#f50">Có sẵn</Tag>;
           }
           return <Tag color="#2db7f5">Không có sẵn</Tag>;
@@ -104,7 +103,6 @@ class Motorbike extends Component {
         className: 'column-center',
         key: 'createdAt',
         width: '12%',
-
       },
       {
         title: 'Hành động',
@@ -141,10 +139,9 @@ class Motorbike extends Component {
     ];
   }
   componentDidMount() {
-    this.props.fetchListMotorbike();
+    this.props.fetchListMotorbike(this.props.shop_id);
     // this.props.fetchListMotorType();
   }
-
 
   componentWillReceiveProps(nextProps) {
     if (this.props.listMotorbike !== nextProps.listMotorbike) {
@@ -152,9 +149,8 @@ class Motorbike extends Component {
     }
   }
 
-
   handleDelete = data => {
-    this.props.delListMotorbike(data);
+    this.props.delListMotorbike(data, this.props.shop_id);
   };
   showModalAdd = () => {
     this.setState({ rowData: {} });
@@ -171,7 +167,6 @@ class Motorbike extends Component {
   handleCreate = () => {
     const form = this.formRef.props.form;
 
-
     form.validateFields((err, values) => {
       if (err) {
         return;
@@ -184,8 +179,13 @@ class Motorbike extends Component {
           className: 'motorbikeType',
           objectId: values.motorbikeType_id,
         },
+        shop_id: {
+          __type: 'Pointer',
+          className: 'shop',
+          objectId: this.props.shop_id,
+        },
       };
-      this.props.addListMotorbike(newValues);
+      this.props.addListMotorbike(newValues, this.props.shop_id);
       // this.props.editListMotorbike(newValues);
     });
   };
@@ -197,7 +197,7 @@ class Motorbike extends Component {
   //     }
   //     this.props.editListMotorbike(this.state.rowData.objectId, values);
   //   });
-  // }; 
+  // };
   handleEdit = () => {
     const form = this.formRef.props.form;
     form.validateFields((err, values) => {
@@ -211,14 +211,14 @@ class Motorbike extends Component {
           className: 'motorbikeType',
           objectId: values.motorbikeType_id,
         },
-
+        shop_id: {
+          __type: 'Pointer',
+          className: 'shop',
+          objectId: this.props.shop_id,
+        },
       };
-      console.log(newValues, "sdadedirtttt");
-      this.props.editListMotorbike(
-        this.state.rowData.objectId,
-        newValues,
-        this.state.rowData.status,
-      );
+      console.log(newValues, 'sdadedirtttt');
+      this.props.editListMotorbike(this.state.rowData.objectId, newValues, this.props.shop_id);
     });
   };
 
@@ -264,11 +264,14 @@ class Motorbike extends Component {
               <IntlMessages id="sidebar.motorbike" />
             </PageHeader>
             <div className="isoLayoutContent">
-              <Table dataSource={
-                _.isEmpty(this.state.listDataMotorbike)
-                  ? this.props.listMotorbike
-                  : this.state.listDataMotorbike
-              } columns={this.columns} />
+              <Table
+                dataSource={
+                  _.isEmpty(this.state.listDataMotorbike)
+                    ? this.props.listMotorbike
+                    : this.state.listDataMotorbike
+                }
+                columns={this.columns}
+              />
             </div>
           </LayoutWrapper>
         </LayoutWrapper>
@@ -287,39 +290,37 @@ Motorbike.propTypes = {
   toggleModal: PropTypes.func,
   addMotorbikeModal: PropTypes.bool,
   editMotorbikeModal: PropTypes.bool,
+  shop_id: PropTypes.string,
 };
 
 export default connect(
   state => {
-    console.log(state.motorbike.listMotorbike, "stateupdateaui");
+    console.log(state.motorbike.listMotorbike, 'stateupdateaui');
     return {
+      shop_id: state.login.shop_id,
       listMotorbike: state.motorbike.listMotorbike,
       addMotorbikeModal: state.togglemodal.modal.addMotorbikeModal,
       editMotorbikeModal: state.togglemodal.modal.editMotorbikeModal,
-
     };
   },
   dispatch => {
     return {
-      fetchListMotorbike: () => {
-        dispatch(fetchListMotorbikeThunk());
+      fetchListMotorbike: id => {
+        dispatch(fetchListMotorbikeThunk(id));
       },
       // fetchListMotorType: () => {
       //   dispatch(fetchListMotorTypesThunk());
       // },
-      addListMotorbike: value => {
-        dispatch(addListMotorbikeThunk(value));
+      addListMotorbike: (value, id) => {
+        dispatch(addListMotorbikeThunk(value, id));
       },
-      editListMotorbike: (id, value, status) => {
-        dispatch(editListMotorbikeThunk(id, value, status));
+      editListMotorbike: (id, value, shopId) => {
+        dispatch(editListMotorbikeThunk(id, value, shopId));
       },
-      delListMotorbike: data => {
-        dispatch(deleteListMotorbikeThunk(data));
+      delListMotorbike: (data, shopId) => {
+        dispatch(deleteListMotorbikeThunk(data, shopId));
       },
       toggleModal: (name, status) => dispatch(toggleModal(name, status)),
-
     };
   },
 )(Motorbike);
-
-
