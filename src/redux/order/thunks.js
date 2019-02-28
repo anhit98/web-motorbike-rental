@@ -5,10 +5,13 @@ import {
   fetchListOrder,
   updateListOrder,
   updateListMotor,
-  deleteListOrder,
+  updateStatus,
+  addListPayment,
 
 } from './actions';
 import { fetchListMotorbikeThunk } from '../../redux/motorbike/thunks';
+import { fetchListPaymentThunk } from '../../redux/payment/thunks';
+
 
 export function fetchListOrderThunk() {
   return dispatch => {
@@ -47,11 +50,24 @@ export function updateListMotorbikeThunk(data, id) {
   };
 }
 
-export function deleteListOrderThunk(data) {
+export function updateStatusThunk(data, id) {
   return dispatch => {
-    apiWrapper(dispatch, del(`/classes/order/${data.objectId}`))
+    apiWrapper(dispatch, put(`/classes/order/${id}`, data))
       .then(() => {
-        dispatch(deleteListOrder(data));
+        dispatch(fetchListOrderThunk());
+      })
+      .catch();
+  };
+}
+export function addListPaymentThunk(data, id) {
+  return dispatch => {
+    apiWrapper(dispatch, post('/classes/payment', data))
+      .then(results => {
+        // dispatch(fetchCurrrentPaymentThunk(results.objectId));
+        dispatch(fetchListPaymentThunk());
+        // dispatch(deleteListOrderThunk(id));
+
+
       })
       .catch();
   };

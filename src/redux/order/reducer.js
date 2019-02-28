@@ -34,10 +34,32 @@ const updateListMotor = (state, action) => {
     isOrderFormOpen: false,
   };
 };
+const updateStatus = (state, action) => {
+  return {
+    ...state,
+    listOrder: [
+      ...state.listOrder.map(
+        object => (object.objectId === action.data.objectId ? action.data : object),
+      ),
+    ],
+    isOrderFormOpen: false,
+  };
+};
+const addListPayment = (state, action) => {
+  return {
+    ...state,
+    listOrder: [...state.listOrder, action.data],
+    isOrderFormOpen: false,
+  };
+};
 
 export const order = makeReducerCreator(initialState, {
   [Order.FETCH_ORDER]: fetchListOrder,
   [Order.UPDATE_ORDER]: updateListOrder,
   [Order.UPDATE_MOTOR]: updateListMotor,
+  [Order.ADD_PAYMENT]: addListPayment,
+  [Order.UPDATE_STATUS]: updateStatus,
+
+
 
 });
