@@ -26,8 +26,8 @@ class Order extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isDis: false,
-      // rowData: {},
+      isDis: '',
+
       listDataOrder: [],
     };
     this.columns = [
@@ -167,7 +167,6 @@ class Order extends Component {
         key: 'is_cancel',
         width: '8%',
         render: (value, record) => {
-
           if (value === true) {
 
             return <span>Đơn hàng đã hủy</span>;
@@ -182,7 +181,7 @@ class Order extends Component {
         key: 'action',
         width: '10%',
         render: (value, record) => (
-          <div>
+          < div >
             <span>
               <Popconfirm
                 title="Bạn có chắc chắn không?"
@@ -190,7 +189,7 @@ class Order extends Component {
                 okText="Đồng ý"
                 cancelText="Trả xe"
               >
-                <Button className="btn" style={{ width: 65 }} disabled={this.state.isDis} type="primary">Trả xe</Button>
+                <Button className="btn" style={{ width: 65 }} disabled={record.objectId === this.state.isDis} type="primary">Trả xe</Button>
               </Popconfirm>
             </span>
 
@@ -201,10 +200,10 @@ class Order extends Component {
                 okText="Đồng ý"
                 cancelText="Hủy bỏ"
               >
-                <Button className="btn" style={{ width: 65 }} disabled={this.state.isDis} type="danger">Hủy</Button>
+                <Button className="btn" style={{ width: 65 }} disabled={record.objectId === this.state.isDis} type="danger">Hủy</Button>
               </Popconfirm>
             </span>
-          </div>
+          </div >
         ),
       },
       {
@@ -273,8 +272,7 @@ class Order extends Component {
       rent_price: data.motor_id.rent_price,
 
     };
-    this.setState({ isDis: true });
-    console.log(data, "owudrjdfksudowids");
+    this.setState({ isDis: data.objectId });
     this.props.updateListOrder(newValues, data.objectId);
     this.props.updateListMotor(newMotor, data.motor_id.objectId);
   };
@@ -327,8 +325,7 @@ class Order extends Component {
       total_price: data.total_price,
 
     };
-    this.setState({ isDis: true });
-    console.log(data, "data data data");
+    this.setState({ isDis: data.objectId });
     this.props.addListPayment(newPayment, data.objectId);
     this.props.updateStatus(newStatus, data.objectId);
 
