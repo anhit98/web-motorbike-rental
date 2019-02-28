@@ -5,7 +5,12 @@ import { Table, Button, Input, Icon, Popconfirm, Tag } from 'antd';
 import PageHeader from '../../components/utility/PageHeader';
 import LayoutWrapper from '../../components/utility/LayoutWrapper';
 import IntlMessages from '../../components/utility/intlMessages';
-import { fetchListOrderThunk, updateListOrderThunk, updateListMotorbikeThunk, deleteListOrderThunk } from '../../redux/order/thunks';
+import {
+  fetchListOrderThunk,
+  updateListOrderThunk,
+  updateListMotorbikeThunk,
+  deleteListOrderThunk,
+} from '../../redux/order/thunks';
 import OrderStyle from './style';
 import { toggleModal } from './../../redux/modals/actions';
 import _ from 'lodash';
@@ -37,12 +42,8 @@ class Order extends Component {
         key: 'user_id',
         width: '10%',
         render: (value, record) => {
-
-          return (
-
-            <p>{record.user_id.username}</p>
-          );
-        }
+          return <p>{record.user_id.username}</p>;
+        },
       },
       {
         title: 'Số điện thoại',
@@ -51,12 +52,8 @@ class Order extends Component {
         key: 'user_id',
         width: '10%',
         render: (value, record) => {
-
-          return (
-
-            <p>{record.user_id.phoneNumber}</p>
-          );
-        }
+          return <p>{record.user_id.phoneNumber}</p>;
+        },
       },
       {
         title: 'Tuổi',
@@ -65,11 +62,8 @@ class Order extends Component {
         key: 'user_id',
         width: '6%',
         render: (value, record) => {
-          return (
-
-            <p>{record.user_id.age}</p>
-          );
-        }
+          return <p>{record.user_id.age}</p>;
+        },
       },
 
       {
@@ -79,12 +73,8 @@ class Order extends Component {
         key: 'motor_id',
         width: '10%',
         render: (value, record) => {
-
-          return (
-
-            <p>{record.motor_id.name}</p>
-          );
-        }
+          return <p>{record.motor_id.name}</p>;
+        },
       },
       {
         title: 'Biển số xe',
@@ -93,12 +83,8 @@ class Order extends Component {
         key: 'motor_id',
         width: '8%',
         render: (value, record) => {
-
-          return (
-
-            <p>{record.motor_id.license_plate}</p>
-          );
-        }
+          return <p>{record.motor_id.license_plate}</p>;
+        },
       },
       {
         title: 'Số ngày đặt',
@@ -106,7 +92,6 @@ class Order extends Component {
         className: 'column-center',
         key: 'total_days_rented',
         width: '7%',
-
       },
 
       {
@@ -115,10 +100,7 @@ class Order extends Component {
         className: 'column-center',
         key: 'total_price',
         width: '8%',
-
-
       },
-
 
       {
         title: 'Vận chuyển',
@@ -127,14 +109,11 @@ class Order extends Component {
         key: 'is_shipping',
         width: '8%',
         render: (value, record) => {
-
           if (value === true) {
-
             return <span>Vận chuyển</span>;
-          };
+          }
           return <span>Không vận chuyển</span>;
-        }
-
+        },
       },
 
       {
@@ -144,9 +123,8 @@ class Order extends Component {
         key: 'createdAt',
         width: '9%',
         render: value => {
-          return moment(value).format("dddd, MMMM Do YYYY, h:mm:ss a");
-
-        }
+          return moment(value).format('dddd, MMMM Do YYYY, h:mm:ss a');
+        },
       },
       {
         title: 'Ngày dự kiến',
@@ -155,9 +133,10 @@ class Order extends Component {
         key: 'createdAt',
         width: '8%',
         render: value => {
-          return moment(value).add(3, 'hour').calendar();
-
-        }
+          return moment(value)
+            .add(3, 'hour')
+            .calendar();
+        },
       },
       {
         title: 'Trạng thái',
@@ -166,14 +145,11 @@ class Order extends Component {
         key: 'is_cancel',
         width: '8%',
         render: (value, record) => {
-
           if (value === true) {
-
             return <span>Đơn hàng đã hủy</span>;
-          };
+          }
           return <span>Bình thường</span>;
-        }
-
+        },
       },
       {
         title: 'Hành động',
@@ -189,7 +165,9 @@ class Order extends Component {
                 okText="Đồng ý"
                 cancelText="Trả xe"
               >
-                <Button style={{ width: 65 }} type="primary">Trả xe</Button>
+                <Button style={{ width: 65 }} type="primary">
+                  Trả xe
+                </Button>
               </Popconfirm>
             </span>
 
@@ -200,21 +178,19 @@ class Order extends Component {
                 okText="Đồng ý"
                 cancelText="Hủy bỏ"
               >
-                <Button style={{ width: 65 }} type="danger">Hủy</Button>
+                <Button style={{ width: 65 }} type="danger">
+                  Hủy
+                </Button>
               </Popconfirm>
             </span>
           </div>
         ),
       },
-
     ];
   }
   componentDidMount() {
     this.props.fetchListOrder();
-
-
   }
-
 
   componentWillReceiveProps(nextProps) {
     if (this.props.listOrder !== nextProps.listOrder) {
@@ -224,48 +200,6 @@ class Order extends Component {
   handleUpdate = data => {
     this.props.updateListOrder(data);
     const newValues = {
-
-      motor_id: {
-        __type: 'Pointer',
-        className: 'motorbike',
-        objectId: data.motor_id.objectId,
-      },
-      shop_id: data.shop_id,
-      user_id: {
-        __type: 'Pointer',
-        className: '_User',
-        objectId: data.user_id.objectId,
-      },
-      is_shipping: data.is_shipping,
-      is_cancel: true,
-      total_days_rented: data.total_days_rented,
-      is_finished: data.is_finished,
-      total_price: data.total_price,
-
-    };
-    this.props.updateListMotor(data);
-    const newMotor = {
-
-      motorbikeType_id: data.motor_id.motorbikeType_id,
-      shop_id: data.shop_id,
-      name: data.motor_id.name,
-      is_available: true,
-      license_plate: data.motor_id.license_plate,
-      image: data.motor_id.image,
-      description: data.motor_id.description,
-      rent_price: data.motor_id.rent_price,
-
-    };
-    console.log(data, "owudrjdfksudowids");
-    this.props.updateListOrder(newValues, data.objectId);
-    this.props.updateListMotor(newMotor, data.motor_id.objectId);
-  };
-
-  handleDelete = data => {
-    this.props.deleteListOrder(data);
-    console.log(data, "khong ai biet");
-    const newPayment = {
-
       motor_id: {
         __type: 'Pointer',
         className: 'motorbike',
@@ -286,32 +220,79 @@ class Order extends Component {
       total_days_rented: data.total_days_rented,
       is_finished: data.is_finished,
       total_price: data.total_price,
+    };
+    this.props.updateListMotor(data);
+    const newMotor = {
+      motorbikeType_id: {
+        __type: 'Pointer',
+        className: 'motorbikeType',
+        objectId: data.motor_id.motorbikeType_id.objectId,
+      },
+      shop_id: {
+        __type: 'Pointer',
+        className: 'shop',
+        objectId: data.shop_id.objectId,
+      },
+      name: data.motor_id.name,
+      is_available: true,
+      license_plate: data.motor_id.license_plate,
+      image: data.motor_id.image,
+      description: data.motor_id.description,
+      rent_price: data.motor_id.rent_price,
+    };
+    console.log(data, 'owudrjdfksudowids');
+    this.props.updateListOrder(newValues, data.objectId);
+    this.props.updateListMotor(newMotor, data.motor_id.objectId);
+  };
 
+  handleDelete = data => {
+    this.props.deleteListOrder(data);
+    console.log(data, 'khong ai biet');
+    const newPayment = {
+      motor_id: {
+        __type: 'Pointer',
+        className: 'motorbike',
+        objectId: data.motor_id.objectId,
+      },
+      shop_id: {
+        __type: 'Pointer',
+        className: 'shop',
+        objectId: data.shop_id.objectId,
+      },
+      user_id: {
+        __type: 'Pointer',
+        className: '_User',
+        objectId: data.user_id.objectId,
+      },
+      is_shipping: data.is_shipping,
+      is_cancel: true,
+      total_days_rented: data.total_days_rented,
+      is_finished: data.is_finished,
+      total_price: data.total_price,
     };
 
-    console.log(data, "data data data");
+    console.log(data, 'data data data');
     this.props.deleteListOrder(newPayment, data.objectId);
-
   };
 
   render() {
     return (
       <OrderStyle>
-
-
         <LayoutWrapper>
           <PageHeader>
             <IntlMessages id="sidebar.order" />
           </PageHeader>
           <div className="isoLayoutContent">
-            <Table dataSource={
-              _.isEmpty(this.state.listDataOrder)
-                ? this.props.listOrder
-                : this.state.listDataOrder
-            } columns={this.columns} />
+            <Table
+              dataSource={
+                _.isEmpty(this.state.listDataOrder)
+                  ? this.props.listOrder
+                  : this.state.listDataOrder
+              }
+              columns={this.columns}
+            />
           </div>
         </LayoutWrapper>
-
       </OrderStyle>
     );
   }
@@ -324,16 +305,12 @@ Order.propTypes = {
   updateListOrder: PropTypes.func,
   updateListMotor: PropTypes.func,
   deleteListOrder: PropTypes.func,
-
 };
 
 export default connect(
   state => {
-
     return {
       listOrder: state.order.listOrder,
-
-
     };
   },
   dispatch => {
@@ -350,11 +327,6 @@ export default connect(
       deleteListOrder: (data, id) => {
         dispatch(deleteListOrderThunk(data, id));
       },
-
-
-
     };
   },
 )(Order);
-
-
