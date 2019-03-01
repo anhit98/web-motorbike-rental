@@ -8,7 +8,7 @@ import {
 
 export function fetchListPaymentThunk() {
   return dispatch => {
-    apiWrapper(dispatch, get('/classes/payment?&include=order_id&include=user&include=motorbike_id'), false)
+    apiWrapper(dispatch, get('/classes/payment?&include=order_id&include=user&include=motorbike_id&include=shop'), false)
 
       .then(data => {
 
