@@ -5,12 +5,16 @@ import { Table, Button, Input, Icon, Popconfirm, Tag } from 'antd';
 import PageHeader from '../../components/utility/PageHeader';
 import LayoutWrapper from '../../components/utility/LayoutWrapper';
 import IntlMessages from '../../components/utility/intlMessages';
+<<<<<<< HEAD
+import { fetchListOrderThunk, updateListOrderThunk, updateListMotorbikeThunk, addListPaymentThunk, updateStatusThunk } from '../../redux/order/thunks';
+=======
 import {
   fetchListOrderThunk,
   updateListOrderThunk,
   updateListMotorbikeThunk,
   deleteListOrderThunk,
 } from '../../redux/order/thunks';
+>>>>>>> f9a934b8ff17f6612be2a031a357bacf1fcf79ee
 import OrderStyle from './style';
 import { toggleModal } from './../../redux/modals/actions';
 import _ from 'lodash';
@@ -31,7 +35,8 @@ class Order extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // rowData: {},
+      isDis: '',
+
       listDataOrder: [],
     };
     this.columns = [
@@ -40,7 +45,7 @@ class Order extends Component {
         dataIndex: 'user_id',
         className: 'column-center',
         key: 'user_id',
-        width: '10%',
+        width: '8%',
         render: (value, record) => {
           return <p>{record.user_id.username}</p>;
         },
@@ -60,7 +65,7 @@ class Order extends Component {
         dataIndex: 'user_id',
         className: 'column-center',
         key: 'user_id',
-        width: '6%',
+        width: '5%',
         render: (value, record) => {
           return <p>{record.user_id.age}</p>;
         },
@@ -91,7 +96,12 @@ class Order extends Component {
         dataIndex: 'total_days_rented',
         className: 'column-center',
         key: 'total_days_rented',
+<<<<<<< HEAD
+        width: '6%',
+
+=======
         width: '7%',
+>>>>>>> f9a934b8ff17f6612be2a031a357bacf1fcf79ee
       },
 
       {
@@ -107,7 +117,7 @@ class Order extends Component {
         dataIndex: 'is_shipping',
         className: 'column-center',
         key: 'is_shipping',
-        width: '8%',
+        width: '9%',
         render: (value, record) => {
           if (value === true) {
             return <span>Vận chuyển</span>;
@@ -157,17 +167,15 @@ class Order extends Component {
         key: 'action',
         width: '10%',
         render: (value, record) => (
-          <div>
+          < div >
             <span>
               <Popconfirm
                 title="Bạn có chắc chắn không?"
-                onConfirm={() => this.handleDelete(record)}
+                onConfirm={() => this.handleAdd(record)}
                 okText="Đồng ý"
                 cancelText="Trả xe"
               >
-                <Button style={{ width: 65 }} type="primary">
-                  Trả xe
-                </Button>
+                <Button className="btn" style={{ width: 65 }} disabled={record.objectId === this.state.isDis} type="primary">Trả xe</Button>
               </Popconfirm>
             </span>
 
@@ -178,14 +186,31 @@ class Order extends Component {
                 okText="Đồng ý"
                 cancelText="Hủy bỏ"
               >
-                <Button style={{ width: 65 }} type="danger">
-                  Hủy
-                </Button>
+                <Button className="btn" style={{ width: 65 }} disabled={record.objectId === this.state.isDis} type="danger">Hủy</Button>
               </Popconfirm>
             </span>
-          </div>
+          </div >
         ),
       },
+
+      {
+        title: '',
+        dataIndex: 'is_finished',
+        className: 'column-center',
+        key: 'is_finished',
+        width: '7%',
+        render: (value, record) => {
+
+          if (value === true) {
+
+            return <Tag color="#f50">Đã kết thúc</Tag>;
+          };
+          return <Tag color="#2db7f5">Đang diễn ra</Tag>;
+        }
+
+      },
+
+
     ];
   }
   componentDidMount() {
@@ -240,39 +265,62 @@ class Order extends Component {
       description: data.motor_id.description,
       rent_price: data.motor_id.rent_price,
     };
-    console.log(data, 'owudrjdfksudowids');
+    this.setState({ isDis: data.objectId });
     this.props.updateListOrder(newValues, data.objectId);
     this.props.updateListMotor(newMotor, data.motor_id.objectId);
   };
 
-  handleDelete = data => {
-    this.props.deleteListOrder(data);
-    console.log(data, 'khong ai biet');
+  handleAdd = data => {
+    this.props.addListPayment(data);
+    // console.log(data, "khong ai biet");
     const newPayment = {
+
+      motorbike_id: {
+        __type: 'Pointer',
+        className: 'motorbike',
+        objectId: data.motor_id.objectId,
+      },
+      user: {
+        __type: 'Pointer',
+        className: '_User',
+        objectId: data.user_id.objectId,
+      },
+      order_id: {
+        __type: 'Pointer',
+        className: 'order',
+        objectId: data.objectId,
+      },
+      shop: {
+        __type: 'Pointer',
+        className: 'shop',
+        objectId: data.shop_id.objectId,
+      },
+
+    };
+    this.props.updateStatus(data);
+    const newStatus = {
+
       motor_id: {
         __type: 'Pointer',
         className: 'motorbike',
         objectId: data.motor_id.objectId,
       },
-      shop_id: {
-        __type: 'Pointer',
-        className: 'shop',
-        objectId: data.shop_id.objectId,
-      },
+      shop_id: data.shop_id,
       user_id: {
         __type: 'Pointer',
         className: '_User',
         objectId: data.user_id.objectId,
       },
       is_shipping: data.is_shipping,
-      is_cancel: true,
+      is_cancel: data.is_cancel,
       total_days_rented: data.total_days_rented,
-      is_finished: data.is_finished,
+      is_finished: true,
       total_price: data.total_price,
     };
+    this.setState({ isDis: data.objectId });
+    this.props.addListPayment(newPayment, data.objectId);
+    this.props.updateStatus(newStatus, data.objectId);
 
-    console.log(data, 'data data data');
-    this.props.deleteListOrder(newPayment, data.objectId);
   };
 
   render() {
@@ -304,7 +352,8 @@ Order.propTypes = {
   listOrder: PropTypes.array,
   updateListOrder: PropTypes.func,
   updateListMotor: PropTypes.func,
-  deleteListOrder: PropTypes.func,
+  addListPayment: PropTypes.func,
+  updateStatus: PropTypes.func,
 };
 
 export default connect(
@@ -324,8 +373,11 @@ export default connect(
       updateListMotor: (data, id) => {
         dispatch(updateListMotorbikeThunk(data, id));
       },
-      deleteListOrder: (data, id) => {
-        dispatch(deleteListOrderThunk(data, id));
+      addListPayment: (data, id) => {
+        dispatch(addListPaymentThunk(data, id));
+      },
+      updateStatus: (data, id) => {
+        dispatch(updateStatusThunk(data, id));
       },
     };
   },
