@@ -5,16 +5,7 @@ import { Table, Button, Input, Icon, Popconfirm, Tag } from 'antd';
 import PageHeader from '../../components/utility/PageHeader';
 import LayoutWrapper from '../../components/utility/LayoutWrapper';
 import IntlMessages from '../../components/utility/intlMessages';
-<<<<<<< HEAD
 import { fetchListOrderThunk, updateListOrderThunk, updateListMotorbikeThunk, addListPaymentThunk, updateStatusThunk } from '../../redux/order/thunks';
-=======
-import {
-  fetchListOrderThunk,
-  updateListOrderThunk,
-  updateListMotorbikeThunk,
-  deleteListOrderThunk,
-} from '../../redux/order/thunks';
->>>>>>> f9a934b8ff17f6612be2a031a357bacf1fcf79ee
 import OrderStyle from './style';
 import { toggleModal } from './../../redux/modals/actions';
 import _ from 'lodash';
@@ -96,12 +87,8 @@ class Order extends Component {
         dataIndex: 'total_days_rented',
         className: 'column-center',
         key: 'total_days_rented',
-<<<<<<< HEAD
         width: '6%',
 
-=======
-        width: '7%',
->>>>>>> f9a934b8ff17f6612be2a031a357bacf1fcf79ee
       },
 
       {
@@ -214,7 +201,7 @@ class Order extends Component {
     ];
   }
   componentDidMount() {
-    this.props.fetchListOrder();
+    this.props.fetchListOrder(this.props.shop_id);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -223,7 +210,6 @@ class Order extends Component {
     }
   }
   handleUpdate = data => {
-    this.props.updateListOrder(data);
     const newValues = {
       motor_id: {
         __type: 'Pointer',
@@ -246,7 +232,6 @@ class Order extends Component {
       is_finished: data.is_finished,
       total_price: data.total_price,
     };
-    this.props.updateListMotor(data);
     const newMotor = {
       motorbikeType_id: {
         __type: 'Pointer',
@@ -348,7 +333,7 @@ class Order extends Component {
 
 Order.propTypes = {
   fetchListOrder: PropTypes.func,
-
+  shop_id: PropTypes.string,
   listOrder: PropTypes.array,
   updateListOrder: PropTypes.func,
   updateListMotor: PropTypes.func,
@@ -360,18 +345,19 @@ export default connect(
   state => {
     return {
       listOrder: state.order.listOrder,
+      shop_id: state.login.shop_id,
     };
   },
   dispatch => {
     return {
-      fetchListOrder: () => {
-        dispatch(fetchListOrderThunk());
+      fetchListOrder: id => {
+        dispatch(fetchListOrderThunk(id));
       },
-      updateListOrder: (data, id) => {
-        dispatch(updateListOrderThunk(data, id));
+      updateListOrder: (data, id, shopId) => {
+        dispatch(updateListOrderThunk(data, id, shopId));
       },
-      updateListMotor: (data, id) => {
-        dispatch(updateListMotorbikeThunk(data, id));
+      updateListMotor: (data, id, shopId) => {
+        dispatch(updateListMotorbikeThunk(data, id, shopId));
       },
       addListPayment: (data, id) => {
         dispatch(addListPaymentThunk(data, id));
