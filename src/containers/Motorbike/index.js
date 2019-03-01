@@ -311,8 +311,8 @@ export default connect(
       // fetchListMotorType: () => {
       //   dispatch(fetchListMotorTypesThunk());
       // },
-      addListMotorbike: (value, id) => {
-        dispatch(addListMotorbikeThunk(value, id));
+      addListMotorbike: (value, id, shopId) => {
+        dispatch(addListMotorbikeThunk(value, id, shopId));
       },
       editListMotorbike: (id, value, shopId) => {
         dispatch(editListMotorbikeThunk(id, value, shopId));
