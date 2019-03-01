@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { apiWrapper } from '../reduxCreator';
-import { get, put, del } from '../../api/ParseAPI';
+import { get, put, post, del } from '../../api/ParseAPI';
 import {
   fetchListOrder,
   deleteListOrder,
@@ -47,21 +47,21 @@ export function updateListMotorbikeThunk(data, id, shopId) {
   };
 }
 
-export function updateStatusThunk(data, id) {
+export function updateStatusThunk(data, id, shopId) {
   return dispatch => {
     apiWrapper(dispatch, put(`/classes/order/${id}`, data))
       .then(() => {
-        dispatch(fetchListOrderThunk());
+        dispatch(fetchListOrderThunk(shopId));
       })
       .catch();
   };
 }
-export function addListPaymentThunk(data, id) {
+export function addListPaymentThunk(data, id, shopId) {
   return dispatch => {
     apiWrapper(dispatch, post('/classes/payment', data))
       .then(results => {
         // dispatch(fetchCurrrentPaymentThunk(results.objectId));
-        dispatch(fetchListPaymentThunk());
+        dispatch(fetchListPaymentThunk(shopId));
         // dispatch(deleteListOrderThunk(id));
       })
       .catch();

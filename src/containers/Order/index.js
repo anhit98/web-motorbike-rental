@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Table, Button, Input, Icon, Popconfirm, Tag } from 'antd';
+import _ from 'lodash';
+import moment from 'moment';
+import { Table, Button, Popconfirm, Tag } from 'antd';
 import PageHeader from '../../components/utility/PageHeader';
 import LayoutWrapper from '../../components/utility/LayoutWrapper';
 import IntlMessages from '../../components/utility/intlMessages';
-import { fetchListOrderThunk, updateListOrderThunk, updateListMotorbikeThunk, addListPaymentThunk, updateStatusThunk } from '../../redux/order/thunks';
+import {
+  fetchListOrderThunk,
+  updateListOrderThunk,
+  updateListMotorbikeThunk,
+  addListPaymentThunk,
+  updateStatusThunk,
+} from '../../redux/order/thunks';
 import OrderStyle from './style';
-import { toggleModal } from './../../redux/modals/actions';
-import _ from 'lodash';
-import moment from 'moment';
 
 export function formatCurrency(value) {
   if (value) {
@@ -26,8 +31,6 @@ class Order extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isDis: '',
-
       listDataOrder: [],
     };
     this.columns = [
@@ -88,7 +91,6 @@ class Order extends Component {
         className: 'column-center',
         key: 'total_days_rented',
         width: '6%',
-
       },
 
       {
@@ -154,7 +156,7 @@ class Order extends Component {
         key: 'action',
         width: '10%',
         render: (value, record) => (
-          < div >
+          <div>
             <span>
               <Popconfirm
                 title="Bạn có chắc chắn không?"
@@ -162,7 +164,14 @@ class Order extends Component {
                 okText="Đồng ý"
                 cancelText="Trả xe"
               >
-                <Button className="btn" style={{ width: 65 }} disabled={record.objectId === this.state.isDis} type="primary">Trả xe</Button>
+                <Button
+                  className="btn"
+                  style={{ width: 65 }}
+                  disabled={record.is_cancel || record.is_finished}
+                  type="primary"
+                >
+                  Trả xe
+                </Button>
               </Popconfirm>
             </span>
 
@@ -173,10 +182,17 @@ class Order extends Component {
                 okText="Đồng ý"
                 cancelText="Hủy bỏ"
               >
-                <Button className="btn" style={{ width: 65 }} disabled={record.objectId === this.state.isDis} type="danger">Hủy</Button>
+                <Button
+                  className="btn"
+                  style={{ width: 65 }}
+                  disabled={record.is_cancel || record.is_finished}
+                  type="danger"
+                >
+                  Hủy
+                </Button>
               </Popconfirm>
             </span>
-          </div >
+          </div>
         ),
       },
 
@@ -187,21 +203,16 @@ class Order extends Component {
         key: 'is_finished',
         width: '7%',
         render: (value, record) => {
-
           if (value === true) {
-
             return <Tag color="#f50">Đã kết thúc</Tag>;
-          };
+          }
           return <Tag color="#2db7f5">Đang diễn ra</Tag>;
-        }
-
+        },
       },
-
-
     ];
   }
   componentDidMount() {
-    this.props.fetchListOrder();
+    this.props.fetchListOrder(this.props.shop_id);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -210,7 +221,6 @@ class Order extends Component {
     }
   }
   handleUpdate = data => {
-    this.props.updateListOrder(data);
     const newValues = {
       motor_id: {
         __type: 'Pointer',
@@ -252,18 +262,13 @@ class Order extends Component {
       description: data.motor_id.description,
       rent_price: data.motor_id.rent_price,
     };
-    this.setState({ isDis: data.objectId });
-    console.log(data, 'owudrjdfksudowids');
-    this.props.updateListOrder(newValues, data.objectId);
-    this.props.updateListMotor(newMotor, data.motor_id.objectId);
+    this.props.updateListOrder(newValues, data.objectId, this.props.shop_id);
+    this.props.updateListMotor(newMotor, data.motor_id.objectId, this.props.shop_id);
   };
 
   handleAdd = data => {
-    this.props.addListPayment(data);
     // console.log(data, "khong ai biet");
     const newPayment = {
-
-
       motor_id: {
         __type: 'Pointer',
         className: 'motorbike',
@@ -284,11 +289,8 @@ class Order extends Component {
         className: 'shop',
         objectId: data.shop_id.objectId,
       },
-
     };
-    this.props.updateStatus(data);
     const newStatus = {
-
       motor_id: {
         __type: 'Pointer',
         className: 'motorbike',
@@ -307,9 +309,9 @@ class Order extends Component {
       total_price: data.total_price,
     };
     this.setState({ isDis: data.objectId });
-    this.props.addListPayment(newPayment, data.objectId);
-    this.props.updateStatus(newStatus, data.objectId);
-  }
+    this.props.addListPayment(newPayment, data.objectId, this.props.shop_id);
+    this.props.updateStatus(newStatus, data.objectId, this.props.shop_id);
+  };
 
   render() {
     return (
@@ -336,7 +338,7 @@ class Order extends Component {
 
 Order.propTypes = {
   fetchListOrder: PropTypes.func,
-
+  shop_id: PropTypes.string,
   listOrder: PropTypes.array,
   updateListOrder: PropTypes.func,
   updateListMotor: PropTypes.func,
@@ -347,25 +349,26 @@ Order.propTypes = {
 export default connect(
   state => {
     return {
+      shop_id: state.login.shop_id,
       listOrder: state.order.listOrder,
     };
   },
   dispatch => {
     return {
-      fetchListOrder: () => {
-        dispatch(fetchListOrderThunk());
+      fetchListOrder: id => {
+        dispatch(fetchListOrderThunk(id));
       },
-      updateListOrder: (data, id) => {
-        dispatch(updateListOrderThunk(data, id));
+      updateListOrder: (data, id, shop_id) => {
+        dispatch(updateListOrderThunk(data, id, shop_id));
       },
-      updateListMotor: (data, id) => {
-        dispatch(updateListMotorbikeThunk(data, id));
+      updateListMotor: (data, id, shop_id) => {
+        dispatch(updateListMotorbikeThunk(data, id, shop_id));
       },
-      addListPayment: (data, id) => {
-        dispatch(addListPaymentThunk(data, id));
+      addListPayment: (data, id, shop_id) => {
+        dispatch(addListPaymentThunk(data, id, shop_id));
       },
-      updateStatus: (data, id) => {
-        dispatch(updateStatusThunk(data, id));
+      updateStatus: (data, id, shop_id) => {
+        dispatch(updateStatusThunk(data, id, shop_id));
       },
     };
   },

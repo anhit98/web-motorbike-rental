@@ -36,12 +36,8 @@ class Payment extends Component {
         key: 'user',
         width: '12%',
         render: (value, record) => {
-
-          return (
-
-            <p>{record.user.username}</p>
-          );
-        }
+          return <p>{record.user.username}</p>;
+        },
       },
       {
         title: 'Số điện thoại',
@@ -50,12 +46,8 @@ class Payment extends Component {
         key: 'user',
         width: '12%',
         render: (value, record) => {
-
-          return (
-
-            <p>{record.user.phoneNumber}</p>
-          );
-        }
+          return <p>{record.user.phoneNumber}</p>;
+        },
       },
       {
         title: 'Tuổi',
@@ -64,11 +56,8 @@ class Payment extends Component {
         key: 'user',
         width: '6%',
         render: (value, record) => {
-          return (
-
-            <p>{record.user.age}</p>
-          );
-        }
+          return <p>{record.user.age}</p>;
+        },
       },
 
       {
@@ -78,12 +67,8 @@ class Payment extends Component {
         key: 'motorbike_id',
         width: '10%',
         render: (value, record) => {
-
-          return (
-
-            <p>{record.motorbike_id.name}</p>
-          );
-        }
+          return <p>{record.motorbike_id.name}</p>;
+        },
       },
       {
         title: 'Biển số xe',
@@ -92,12 +77,8 @@ class Payment extends Component {
         key: 'motorbike_id',
         width: '10%',
         render: (value, record) => {
-
-          return (
-
-            <p>{record.motorbike_id.license_plate}</p>
-          );
-        }
+          return <p>{record.motorbike_id.license_plate}</p>;
+        },
       },
       {
         title: 'Số ngày thuê',
@@ -106,12 +87,8 @@ class Payment extends Component {
         key: 'order_id',
         width: '8%',
         render: (value, record) => {
-
-          return (
-
-            <p>{record.order_id.total_days_rented}</p>
-          );
-        }
+          return <p>{record.order_id.total_days_rented}</p>;
+        },
       },
       {
         title: 'Tổng tiền',
@@ -120,14 +97,9 @@ class Payment extends Component {
         key: 'order_id',
         width: '10%',
         render: (value, record) => {
-          return (
-
-            <p>{record.order_id.total_price}</p>
-
-          );
-        }
+          return <p>{record.order_id.total_price}</p>;
+        },
       },
-
 
       {
         title: 'Phí vận chuyển',
@@ -136,14 +108,11 @@ class Payment extends Component {
         key: 'order_id',
         width: '8%',
         render: (value, record) => {
-
           if (record.order_id.is_shipping === true) {
-
             return <span>15.000</span>;
-          };
+          }
           return <span>0</span>;
-        }
-
+        },
       },
 
       {
@@ -152,16 +121,12 @@ class Payment extends Component {
         className: 'column-center',
         key: 'createdAt',
         width: '12%',
-
       },
-
     ];
   }
   componentDidMount() {
-    this.props.fetchListPayment();
-
+    this.props.fetchListPayment(this.props.shop_id);
   }
-
 
   componentWillReceiveProps(nextProps) {
     if (this.props.listPayment !== nextProps.listPayment) {
@@ -172,21 +137,21 @@ class Payment extends Component {
   render() {
     return (
       <PaymentStyle>
-
-
         <LayoutWrapper>
           <PageHeader>
             <IntlMessages id="sidebar.payment" />
           </PageHeader>
           <div className="isoLayoutContent">
-            <Table dataSource={
-              _.isEmpty(this.state.listDataPayment)
-                ? this.props.listPayment
-                : this.state.listDataPayment
-            } columns={this.columns} />
+            <Table
+              dataSource={
+                _.isEmpty(this.state.listDataPayment)
+                  ? this.props.listPayment
+                  : this.state.listDataPayment
+              }
+              columns={this.columns}
+            />
           </div>
         </LayoutWrapper>
-
       </PaymentStyle>
     );
   }
@@ -194,30 +159,22 @@ class Payment extends Component {
 
 Payment.propTypes = {
   fetchListPayment: PropTypes.func,
-
+  shop_id: PropTypes.string,
   listPayment: PropTypes.array,
-
-
 };
 
 export default connect(
   state => {
-
     return {
+      shop_id: state.login.shop_id,
       listPayment: state.payment.listPayment,
-
     };
   },
   dispatch => {
     return {
-      fetchListPayment: () => {
-        dispatch(fetchListPaymentThunk());
+      fetchListPayment: id => {
+        dispatch(fetchListPaymentThunk(id));
       },
-
-
-
     };
   },
 )(Payment);
-
-

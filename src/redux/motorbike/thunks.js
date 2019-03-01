@@ -31,11 +31,11 @@ export function fetchListMotorbikeThunk(id) {
   };
 }
 
-export function addListMotorbikeThunk(value, id) {
+export function addListMotorbikeThunk(value, shopId) {
   return dispatch => {
     apiWrapper(dispatch, post('/classes/motorbike', value))
       .then(results => {
-        dispatch(fetchListMotorbikeThunk(id));
+        dispatch(fetchListMotorbikeThunk(shopId));
         dispatch(toggleModal('addMotorbikeModal', false));
       })
       .catch();
@@ -53,11 +53,11 @@ export function editListMotorbikeThunk(id, value, shopId) {
       .catch();
   };
 }
-export function deleteListMotorbikeThunk(data, id) {
+export function deleteListMotorbikeThunk(data, shopId) {
   return dispatch => {
     apiWrapper(dispatch, del(`/classes/motorbike/${data.objectId}`))
       .then(() => {
-        dispatch(fetchListMotorbikeThunk(id));
+        dispatch(fetchListMotorbikeThunk(shopId));
         dispatch(delListMotorbike(data));
       })
       .catch();
