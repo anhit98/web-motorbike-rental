@@ -201,7 +201,7 @@ class Order extends Component {
     ];
   }
   componentDidMount() {
-    this.props.fetchListOrder(this.props.shop_id);
+    this.props.fetchListOrder();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -210,6 +210,7 @@ class Order extends Component {
     }
   }
   handleUpdate = data => {
+    this.props.updateListOrder(data);
     const newValues = {
       motor_id: {
         __type: 'Pointer',
@@ -232,6 +233,7 @@ class Order extends Component {
       is_finished: data.is_finished,
       total_price: data.total_price,
     };
+    this.props.updateListMotor(data);
     const newMotor = {
       motorbikeType_id: {
         __type: 'Pointer',
@@ -251,6 +253,7 @@ class Order extends Component {
       rent_price: data.motor_id.rent_price,
     };
     this.setState({ isDis: data.objectId });
+    console.log(data, 'owudrjdfksudowids');
     this.props.updateListOrder(newValues, data.objectId);
     this.props.updateListMotor(newMotor, data.motor_id.objectId);
   };
@@ -260,7 +263,8 @@ class Order extends Component {
     // console.log(data, "khong ai biet");
     const newPayment = {
 
-      motorbike_id: {
+
+      motor_id: {
         __type: 'Pointer',
         className: 'motorbike',
         objectId: data.motor_id.objectId,
@@ -305,8 +309,7 @@ class Order extends Component {
     this.setState({ isDis: data.objectId });
     this.props.addListPayment(newPayment, data.objectId);
     this.props.updateStatus(newStatus, data.objectId);
-
-  };
+  }
 
   render() {
     return (
@@ -333,7 +336,7 @@ class Order extends Component {
 
 Order.propTypes = {
   fetchListOrder: PropTypes.func,
-  shop_id: PropTypes.string,
+
   listOrder: PropTypes.array,
   updateListOrder: PropTypes.func,
   updateListMotor: PropTypes.func,
@@ -345,19 +348,18 @@ export default connect(
   state => {
     return {
       listOrder: state.order.listOrder,
-      shop_id: state.login.shop_id,
     };
   },
   dispatch => {
     return {
-      fetchListOrder: id => {
-        dispatch(fetchListOrderThunk(id));
+      fetchListOrder: () => {
+        dispatch(fetchListOrderThunk());
       },
-      updateListOrder: (data, id, shopId) => {
-        dispatch(updateListOrderThunk(data, id, shopId));
+      updateListOrder: (data, id) => {
+        dispatch(updateListOrderThunk(data, id));
       },
-      updateListMotor: (data, id, shopId) => {
-        dispatch(updateListMotorbikeThunk(data, id, shopId));
+      updateListMotor: (data, id) => {
+        dispatch(updateListMotorbikeThunk(data, id));
       },
       addListPayment: (data, id) => {
         dispatch(addListPaymentThunk(data, id));
