@@ -265,29 +265,17 @@ class Order extends Component {
       description: data.motor_id.description,
       rent_price: data.motor_id.rent_price,
     };
-<<<<<<< HEAD
     this.setState({ isDis: data.objectId });
-=======
-    console.log(data, 'owudrjdfksudowids');
->>>>>>> f9a934b8ff17f6612be2a031a357bacf1fcf79ee
     this.props.updateListOrder(newValues, data.objectId);
     this.props.updateListMotor(newMotor, data.motor_id.objectId);
   };
 
-<<<<<<< HEAD
   handleAdd = data => {
     this.props.addListPayment(data);
     // console.log(data, "khong ai biet");
     const newPayment = {
 
       motorbike_id: {
-=======
-  handleDelete = data => {
-    this.props.deleteListOrder(data);
-    console.log(data, 'khong ai biet');
-    const newPayment = {
-      motor_id: {
->>>>>>> f9a934b8ff17f6612be2a031a357bacf1fcf79ee
         __type: 'Pointer',
         className: 'motorbike',
         objectId: data.motor_id.objectId,
@@ -329,16 +317,10 @@ class Order extends Component {
       is_finished: true,
       total_price: data.total_price,
     };
-<<<<<<< HEAD
     this.setState({ isDis: data.objectId });
     this.props.addListPayment(newPayment, data.objectId);
     this.props.updateStatus(newStatus, data.objectId);
 
-=======
-
-    console.log(data, 'data data data');
-    this.props.deleteListOrder(newPayment, data.objectId);
->>>>>>> f9a934b8ff17f6612be2a031a357bacf1fcf79ee
   };
 
   render() {
@@ -370,12 +352,8 @@ Order.propTypes = {
   listOrder: PropTypes.array,
   updateListOrder: PropTypes.func,
   updateListMotor: PropTypes.func,
-<<<<<<< HEAD
   addListPayment: PropTypes.func,
   updateStatus: PropTypes.func,
-=======
-  deleteListOrder: PropTypes.func,
->>>>>>> f9a934b8ff17f6612be2a031a357bacf1fcf79ee
 };
 
 export default connect(
