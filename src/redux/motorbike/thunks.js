@@ -32,6 +32,7 @@ export function fetchListMotorbikeThunk(id) {
 }
 
 export function addListMotorbikeThunk(value, shopId) {
+  console.log(value, 'imagein thunk');
   return dispatch => {
     apiWrapper(dispatch, post('/classes/motorbike', value))
       .then(results => {
@@ -63,3 +64,26 @@ export function deleteListMotorbikeThunk(data, shopId) {
       .catch();
   };
 }
+// uploadPhotoToParse() {
+//   // let photoURL = 'file:///Users/wookiem/logo.jpg';
+
+//   fetch('https://api.parse.com/1/files/pic.jpg', {
+//     method: 'POST',
+//     headers: {
+//       'X-Parse-Application-Id': process.env.REACT_APP_PARSE_APP_ID,
+//       'X-Parse-REST-API-Key': process.env.REACT_APP_PARSE_REST_API_KEY,
+//       'Content-Type': 'image/jpeg',
+//     },
+//     url: photoURL,
+//   })
+//     .then(response => {
+//       if (response.status === 200 || response.status === 201) {
+//         return {};
+//       }
+//       const res = JSON.parse(response._bodyInit);
+//       throw res;
+//     })
+//     .catch(error => {
+//       throw error;
+//     });
+// }

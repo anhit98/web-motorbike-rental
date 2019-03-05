@@ -33,6 +33,8 @@ class Motorbike extends Component {
     super(props);
     this.state = {
       rowData: {},
+      imageList: [],
+      imgArr: [],
       listDataMotorbike: [],
     };
     this.columns = [
@@ -45,11 +47,7 @@ class Motorbike extends Component {
         width: '14%',
       },
       {
-        title: 'Hình ảnh',
-        dataIndex: 'image',
-        className: 'column-center',
-        key: 'image',
-        width: '14%',
+        key: 'images',
       },
       {
         title: 'Loại xe',
@@ -148,7 +146,11 @@ class Motorbike extends Component {
       this.setState({ listDataMotorbike: nextProps.listMotorbike });
     }
   }
-
+  // handler function
+  getPropsFromChild = images => {
+    console.log(images, 'anhdo');
+    this.setState({ imageList: images });
+  };
   handleDelete = data => {
     this.props.delListMotorbike(data, this.props.shop_id);
   };
@@ -158,19 +160,40 @@ class Motorbike extends Component {
   };
   showModalEdit = record => {
     this.setState({ rowData: record });
+    console.log(record, 'editttttttttttttttttttttttttttttt');
+
     this.props.toggleModal('editMotorbikeModal', true);
   };
 
   handleCancel = () => {
     this.setState({ rowData: {} });
   };
+
   handleCreate = () => {
     const form = this.formRef.props.form;
-
     form.validateFields((err, values) => {
       if (err) {
         return;
       }
+      const img = [];
+      // if (_.isEmpty(this.state.imgArr)) {
+      this.state.imageList.map(image => {
+        img.push(image.thumbUrl);
+
+        // this.setState({
+        //   imgArr: [
+        //     ...this.state.imgArr,
+        //     {
+        //       name: image.name,
+        //       url: image.thumbUrl,
+        //       __type: 'File',
+        //     },
+        //   ],
+        // });
+
+        return null;
+      });
+      // }
 
       const newValues = {
         ...values,
@@ -184,7 +207,11 @@ class Motorbike extends Component {
           className: 'shop',
           objectId: this.props.shop_id,
         },
+        is_available: true,
+        is_shipping: false,
+        images: this.state.imageList,
       };
+      console.log(this.state.imageList, img, 'hinhacch');
       this.props.addListMotorbike(newValues, this.props.shop_id);
       // this.props.editListMotorbike(newValues);
     });
@@ -198,6 +225,7 @@ class Motorbike extends Component {
   //     this.props.editListMotorbike(this.state.rowData.objectId, values);
   //   });
   // };
+
   handleEdit = () => {
     const form = this.formRef.props.form;
     form.validateFields((err, values) => {
@@ -216,6 +244,7 @@ class Motorbike extends Component {
           className: 'shop',
           objectId: this.props.shop_id,
         },
+        images: this.state.imageList,
       };
       console.log(newValues, 'sdadedirtttt');
       this.props.editListMotorbike(this.state.rowData.objectId, newValues, this.props.shop_id);
@@ -237,6 +266,7 @@ class Motorbike extends Component {
               </Button>
               {this.props.addMotorbikeModal && (
                 <MotorbikeModal
+                  getPropsFromChild={this.getPropsFromChild}
                   wrappedComponentRef={this.saveFormRef}
                   text="Create"
                   title="Tạo một xe mới"
@@ -249,6 +279,7 @@ class Motorbike extends Component {
                 <MotorbikeModal
                   wrappedComponentRef={this.saveFormRef}
                   name="editMotorbikeModal"
+                  getPropsFromChild={this.getPropsFromChild}
                   text="Edit"
                   title="Chỉnh sửa xe"
                   saveFormRef={this.saveFormRef}
