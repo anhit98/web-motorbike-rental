@@ -42,7 +42,16 @@ export function addListMotorbikeThunk(value, shopId) {
       .catch();
   };
 }
-
+export function parseImgThunk(img, name) {
+  console.log(img, 'image trong thunk');
+  return dispatch => {
+    apiWrapper(dispatch, post('/files/pic.jpg', `@${img}`))
+      .then(results => {
+        console.log(results, 'anhaaaaaaaaaaaaaaaaa');
+      })
+      .catch();
+  };
+}
 export function editListMotorbikeThunk(id, value, shopId) {
   console.log(value, 'môtrrthnunkkkkkkk');
   return dispatch => {
@@ -64,26 +73,3 @@ export function deleteListMotorbikeThunk(data, shopId) {
       .catch();
   };
 }
-// uploadPhotoToParse() {
-//   // let photoURL = 'file:///Users/wookiem/logo.jpg';
-
-//   fetch('https://api.parse.com/1/files/pic.jpg', {
-//     method: 'POST',
-//     headers: {
-//       'X-Parse-Application-Id': process.env.REACT_APP_PARSE_APP_ID,
-//       'X-Parse-REST-API-Key': process.env.REACT_APP_PARSE_REST_API_KEY,
-//       'Content-Type': 'image/jpeg',
-//     },
-//     url: photoURL,
-//   })
-//     .then(response => {
-//       if (response.status === 200 || response.status === 201) {
-//         return {};
-//       }
-//       const res = JSON.parse(response._bodyInit);
-//       throw res;
-//     })
-//     .catch(error => {
-//       throw error;
-//     });
-// }

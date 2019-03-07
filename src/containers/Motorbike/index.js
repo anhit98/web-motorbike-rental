@@ -46,9 +46,7 @@ class Motorbike extends Component {
         sorter: (a, b) => a.name.length - b.name.length,
         width: '14%',
       },
-      {
-        key: 'images',
-      },
+
       {
         title: 'Loại xe',
         dataIndex: 'motorbikeType_id',
@@ -148,7 +146,7 @@ class Motorbike extends Component {
   }
   // handler function
   getPropsFromChild = images => {
-    console.log(images, 'anhdo');
+    console.log(images, 'list base64');
     this.setState({ imageList: images });
   };
   handleDelete = data => {
@@ -175,79 +173,158 @@ class Motorbike extends Component {
       if (err) {
         return;
       }
-      const img = [];
-      // if (_.isEmpty(this.state.imgArr)) {
       this.state.imageList.map(image => {
-        img.push(image.thumbUrl);
-
-        // this.setState({
-        //   imgArr: [
-        //     ...this.state.imgArr,
-        //     {
-        //       name: image.name,
-        //       url: image.thumbUrl,
-        //       __type: 'File',
-        //     },
-        //   ],
-        // });
+        const formData = new FormData();
+        const a = _.replace(image.thumbUrl, new RegExp('data:image/png;base64', 'g'), '');
+        formData.append('image', a);
+        formData.append('type', 'base64');
+        fetch('https://api.imgur.com/3/image/', {
+          // mode: 'cors',
+          method: 'POST',
+          headers: {
+            Authorization: 'Client-ID 5a1a4901a3533b4',
+          },
+          body: formData,
+        })
+          .then(res => {
+            return res.json();
+          })
+          .then(data => {
+            const u = {
+              url: `https://i.imgur.com/${data.data.id}.png`,
+              uid: image.uid,
+            };
+            console.log(u, 'data');
+            this.setState({ imgArr: [...this.state.imgArr, u] });
+            if (this.state.imgArr.length === this.state.imageList.length) {
+              const newValues = {
+                ...values,
+                motorbikeType_id: {
+                  __type: 'Pointer',
+                  className: 'motorbikeType',
+                  objectId: values.motorbikeType_id,
+                },
+                image: this.state.imgArr[0].url,
+                shop_id: {
+                  __type: 'Pointer',
+                  className: 'shop',
+                  objectId: this.props.shop_id,
+                },
+                is_available: true,
+                images: this.state.imgArr,
+              };
+              this.props.addListMotorbike(newValues, this.props.shop_id);
+              this.setState({ imgArr: [] });
+              this.setState({ imageList: [] });
+            }
+          })
+          .catch(error => {
+            console.error(error);
+            // alert('Upload failed: ' + error);
+          });
 
         return null;
       });
-      // }
-
-      const newValues = {
-        ...values,
-        motorbikeType_id: {
-          __type: 'Pointer',
-          className: 'motorbikeType',
-          objectId: values.motorbikeType_id,
-        },
-        shop_id: {
-          __type: 'Pointer',
-          className: 'shop',
-          objectId: this.props.shop_id,
-        },
-        is_available: true,
-        is_shipping: false,
-        images: this.state.imageList,
-      };
-      console.log(this.state.imageList, img, 'hinhacch');
-      this.props.addListMotorbike(newValues, this.props.shop_id);
-      // this.props.editListMotorbike(newValues);
     });
   };
-  // handleEdit = () => {
-  //   const form = this.formRef.props.form;
-  //   form.validateFields((err, values) => {
-  //     if (err) {
-  //       return;
-  //     }
-  //     this.props.editListMotorbike(this.state.rowData.objectId, values);
-  //   });
-  // };
 
   handleEdit = () => {
     const form = this.formRef.props.form;
     form.validateFields((err, values) => {
+      console.log(this.state.imageList.length !== 0);
+      console.log(values, this.state.imageList, 'trc khi sua');
+
       if (err) {
         return;
       }
-      const newValues = {
-        ...values,
-        motorbikeType_id: {
-          __type: 'Pointer',
-          className: 'motorbikeType',
-          objectId: values.motorbikeType_id,
-        },
-        shop_id: {
-          __type: 'Pointer',
-          className: 'shop',
-          objectId: this.props.shop_id,
-        },
-        images: this.state.imageList,
-      };
-      console.log(newValues, 'sdadedirtttt');
-      this.props.editListMotorbike(this.state.rowData.objectId, newValues, this.props.shop_id);
+
+      console.log(this.state.imageList, 'anh');
+
+      this.state.imageList.map(image => {
+        if (_.has(image, 'name')) {
+          const formData = new FormData();
+          const a = _.replace(image.thumbUrl, new RegExp('data:image/png;base64', 'g'), '');
+          formData.append('image', a);
+          formData.append('type', 'base64');
+          fetch('https://api.imgur.com/3/image/', {
+            // mode: 'cors',
+            method: 'POST',
+            headers: {
+              Authorization: 'Client-ID 5a1a4901a3533b4',
+            },
+            body: formData,
+          })
+            .then(res => {
+              return res.json();
+            })
+            .then(data => {
+              const u = {
+                url: `https://i.imgur.com/${data.data.id}.png`,
+                uid: image.uid,
+              };
+              console.log(u, 'data');
+              this.setState({ imgArr: [...this.state.imgArr, u] });
+              if (this.state.imgArr.length === this.state.imageList.length) {
+                const newValues = {
+                  ...values,
+                  motorbikeType_id: {
+                    __type: 'Pointer',
+                    className: 'motorbikeType',
+                    objectId: values.motorbikeType_id,
+                  },
+                  image: this.state.imgArr[0].url,
+                  shop_id: {
+                    __type: 'Pointer',
+                    className: 'shop',
+                    objectId: this.props.shop_id,
+                  },
+                  is_available: true,
+                  images: this.state.imgArr,
+                };
+                this.props.editListMotorbike(
+                  this.state.rowData.objectId,
+                  newValues,
+                  this.props.shop_id,
+                );
+                this.setState({ imgArr: [] });
+                this.setState({ imageList: [] });
+              }
+            })
+            .catch(error => {
+              console.error(error);
+              // alert('Upload failed: ' + error);
+            });
+        } else {
+          this.setState({ imgArr: [...this.state.imgArr, image] });
+          if (this.state.imgArr.length === this.state.imageList.length) {
+            const newValues = {
+              ...values,
+              motorbikeType_id: {
+                __type: 'Pointer',
+                className: 'motorbikeType',
+                objectId: values.motorbikeType_id,
+              },
+              image: this.state.imgArr[0].url,
+              shop_id: {
+                __type: 'Pointer',
+                className: 'shop',
+                objectId: this.props.shop_id,
+              },
+              is_available: true,
+              images: this.state.imgArr,
+            };
+            this.props.editListMotorbike(
+              this.state.rowData.objectId,
+              newValues,
+              this.props.shop_id,
+            );
+            this.setState({ imgArr: [] });
+            this.setState({ imageList: [] });
+          }
+        }
+
+        return null;
+      });
     });
   };
 
@@ -326,7 +403,6 @@ Motorbike.propTypes = {
 
 export default connect(
   state => {
-    console.log(state.motorbike.listMotorbike, 'stateupdateaui');
     return {
       shop_id: state.login.shop_id,
       listMotorbike: state.motorbike.listMotorbike,
@@ -351,6 +427,7 @@ export default connect(
       delListMotorbike: (data, shopId) => {
         dispatch(deleteListMotorbikeThunk(data, shopId));
       },
+
       toggleModal: (name, status) => dispatch(toggleModal(name, status)),
     };
   },
