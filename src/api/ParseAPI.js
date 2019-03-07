@@ -82,8 +82,8 @@ function requestWrapper(method) {
     }
 
     if (method === 'POST' || method === 'PUT') {
-      defaults.headers.Accept = 'application/json';
-      defaults.headers['Content-Type'] = 'application/json';
+      defaults.headers.Accept = ('application/json', 'image/png');
+      defaults.headers['Content-Type'] = ('application/json', 'image/png');
     }
 
     if (dataReq) {

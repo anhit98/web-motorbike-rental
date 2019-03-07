@@ -8,11 +8,12 @@ export function fetchListPaymentThunk(id) {
     apiWrapper(
       dispatch,
       get(
-        `/classes/payment?&include=order_id&include=user&include=motorbike_id&include=shop&where={"shop_id":{"__type":"Pointer","className":"shop","objectId":"${id}"}}`,
+        `/classes/payment?&include=order_id&include=user&include=motorbike_id&include=shop&where={"shop":{"__type":"Pointer","className":"shop","objectId":"${id}"}}`,
       ),
       false,
     )
       .then(data => {
+        console.log(data, 'pamenyrgung');
         dispatch(fetchListPayment(data.results));
         const PaymentsID = _.map(data.results, item => {
           return `${item.objectId}`;

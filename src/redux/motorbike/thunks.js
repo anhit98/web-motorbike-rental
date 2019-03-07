@@ -32,6 +32,7 @@ export function fetchListMotorbikeThunk(id) {
 }
 
 export function addListMotorbikeThunk(value, shopId) {
+  console.log(value, 'imagein thunk');
   return dispatch => {
     apiWrapper(dispatch, post('/classes/motorbike', value))
       .then(results => {
@@ -41,7 +42,16 @@ export function addListMotorbikeThunk(value, shopId) {
       .catch();
   };
 }
-
+export function parseImgThunk(img, name) {
+  console.log(img, 'image trong thunk');
+  return dispatch => {
+    apiWrapper(dispatch, post('/files/pic.jpg', `@${img}`))
+      .then(results => {
+        console.log(results, 'anhaaaaaaaaaaaaaaaaa');
+      })
+      .catch();
+  };
+}
 export function editListMotorbikeThunk(id, value, shopId) {
   console.log(value, 'môtrrthnunkkkkkkk');
   return dispatch => {
