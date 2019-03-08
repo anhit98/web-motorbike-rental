@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Input, InputNumber, Row, Col, Select } from 'antd';
+import { connect } from 'react-redux';
+import _ from 'lodash';
+
+import { Form, Input, Upload, Icon, Modal, InputNumber, Row, Col, Select } from 'antd';
 import ModalComponent from './../common/ModalComponent/index';
 import MotorbikeModalStyle from './style';
 import { fetchListMotorTypesThunk } from '../../redux/motorbiketype/thunks';
-import _ from 'lodash';
-import { connect } from 'react-redux';
-
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -25,17 +25,48 @@ function handleFocus() {
 class MotorbikeModal extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      previewVisible: false,
+      previewImage: '',
+      fileList: [],
+    };
   }
-
   componentDidMount() {
     this.props.fetchListMotorType();
   }
+  handlePreview = file => {
+    this.setState({
+      previewImage: file.url || file.thumbUrl,
+      previewVisible: true,
+    });
+  };
+
+  handleChange = ({ fileList }) => {
+    this.setState({ fileList });
+    console.log(this.state.fileList, 'imagesssssssssssssdvdvbfsss');
+    this.props.getPropsFromChild(this.state.fileList);
+  };
+
+  handleCancel = () => this.setState({ previewVisible: false });
+
   render() {
+    const { previewVisible, previewImage, fileList } = this.state;
+    const uploadButton = (
+      <div>
+        <Icon type="plus" />
+        <div className="ant-upload-text">Upload</div>
+      </div>
+    );
     const { form, title, text, onCreate, name } = this.props;
     const { getFieldDecorator } = form;
     return (
-      <ModalComponent title={title} text={text} name={name} onCreate={onCreate}>
+      <ModalComponent
+        title={title}
+        text={text}
+        name={name}
+        images={this.state.fileList}
+        onCreate={onCreate}
+      >
         <Form layout="vertical">
           <Row gutter={12}>
             <Col span={12}>
@@ -70,8 +101,6 @@ class MotorbikeModal extends Component {
               </FormItem>
             </Col>
 
-
-
             <Col span={12}>
               <FormItem label="Loại xe">
                 {getFieldDecorator('motorbikeType_id', {
@@ -84,7 +113,10 @@ class MotorbikeModal extends Component {
                     },
                   ],
                   // initialValue: this.props.data && this.props.data.motorbikeType_id.objectId,
-                  initialValue: this.props.data && this.props.data.motorbikeType_id && this.props.data.motorbikeType_id.objectId,
+                  initialValue:
+                    this.props.data &&
+                    this.props.data.motorbikeType_id &&
+                    this.props.data.motorbikeType_id.objectId,
                 })(
                   <Select
                     showSearch
@@ -94,18 +126,18 @@ class MotorbikeModal extends Component {
                     onChange={handleChange}
                     onFocus={handleFocus}
                     onBlur={handleBlur}
-                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                    filterOption={(input, option) =>
+                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
                   >
-
-
                     {this.props.listMotor.map(motortype => (
                       <Option key={motortype.objectId} value={motortype.objectId}>
                         {motortype.name}
                       </Option>
                     ))}
-
                   </Select>,
-                  <Input />)}
+                  <Input />,
+                )}
               </FormItem>
             </Col>
             <Col span={12}>
@@ -124,12 +156,11 @@ class MotorbikeModal extends Component {
                 </FormItem>
               </MotorbikeModalStyle>
             </Col>
-
           </Row>
           <Row gutter={12}>
             <Col span={24}>
               <FormItem label="Hình ảnh">
-                {getFieldDecorator('image', {
+                {getFieldDecorator('images', {
                   rules: [
                     {
                       required: true,
@@ -138,8 +169,23 @@ class MotorbikeModal extends Component {
                       min: '0',
                     },
                   ],
-                  initialValue: this.props.data && this.props.data.image,
-                })(<Input />)}
+                  initialValue: this.props.data && this.props.data.images,
+                })(
+                  <div className="clearfix">
+                    <Upload
+                      action="//jsonplaceholder.typicode.com/posts/"
+                      listType="picture-card"
+                      fileList={_.isEmpty(fileList) ? this.props.data.images : fileList}
+                      onPreview={this.handlePreview}
+                      onChange={this.handleChange}
+                    >
+                      {fileList.length >= 8 ? null : uploadButton}
+                    </Upload>
+                    <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+                      <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                    </Modal>
+                  </div>,
+                )}
               </FormItem>
             </Col>
           </Row>
@@ -152,16 +198,17 @@ class MotorbikeModal extends Component {
               </FormItem>
             </Col>
           </Row>
-
         </Form>
       </ModalComponent>
     );
   }
 }
 MotorbikeModal.propTypes = {
+  fetchListMotorType: PropTypes.func,
   form: PropTypes.object,
   onCreate: PropTypes.func,
   name: PropTypes.string,
+  getPropsFromChild: PropTypes.func,
   data: PropTypes.object,
   title: PropTypes.string,
   text: PropTypes.string,
@@ -171,7 +218,7 @@ MotorbikeModal.propTypes = {
 const createForm = Form.create()(MotorbikeModal);
 export default connect(
   state => {
-    console.log(state.motortypes.listMotorTypes, "stateau");
+    console.log(state.motortypes.listMotorTypes, 'stateau');
     return {
       listMotor: state.motortypes.listMotorTypes,
     };
@@ -184,4 +231,3 @@ export default connect(
     };
   },
 )(createForm);
-

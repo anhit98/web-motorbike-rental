@@ -62,11 +62,9 @@ class Renter extends Component {
         dataIndex: 'avatar',
         key: 'avatar',
         render: (value, record) => {
-          const a = `../../assets/images/${record.user_id.avatar}`;
-          console.log(a, record, 'tham');
           return (
             <div>
-              <Avatar src={a} />
+              <Avatar src={record.user_id.avatar.url} />
             </div>
           );
         },

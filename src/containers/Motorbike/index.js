@@ -33,6 +33,8 @@ class Motorbike extends Component {
     super(props);
     this.state = {
       rowData: {},
+      imageList: [],
+      imgArr: [],
       listDataMotorbike: [],
     };
     this.columns = [
@@ -44,13 +46,7 @@ class Motorbike extends Component {
         sorter: (a, b) => a.name.length - b.name.length,
         width: '14%',
       },
-      {
-        title: 'Hình ảnh',
-        dataIndex: 'image',
-        className: 'column-center',
-        key: 'image',
-        width: '14%',
-      },
+
       {
         title: 'Loại xe',
         dataIndex: 'motorbikeType_id',
@@ -148,7 +144,11 @@ class Motorbike extends Component {
       this.setState({ listDataMotorbike: nextProps.listMotorbike });
     }
   }
-
+  // handler function
+  getPropsFromChild = images => {
+    console.log(images, 'list base64');
+    this.setState({ imageList: images });
+  };
   handleDelete = data => {
     this.props.delListMotorbike(data, this.props.shop_id);
   };
@@ -158,67 +158,173 @@ class Motorbike extends Component {
   };
   showModalEdit = record => {
     this.setState({ rowData: record });
+    console.log(record, 'editttttttttttttttttttttttttttttt');
+
     this.props.toggleModal('editMotorbikeModal', true);
   };
 
   handleCancel = () => {
     this.setState({ rowData: {} });
   };
+
   handleCreate = () => {
     const form = this.formRef.props.form;
-
     form.validateFields((err, values) => {
       if (err) {
         return;
       }
+      this.state.imageList.map(image => {
+        const formData = new FormData();
+        const a = _.replace(image.thumbUrl, new RegExp('data:image/png;base64', 'g'), '');
+        formData.append('image', a);
+        formData.append('type', 'base64');
+        fetch('https://api.imgur.com/3/image/', {
+          // mode: 'cors',
+          method: 'POST',
+          headers: {
+            Authorization: 'Client-ID 5a1a4901a3533b4',
+          },
+          body: formData,
+        })
+          .then(res => {
+            return res.json();
+          })
+          .then(data => {
+            const u = {
+              url: `https://i.imgur.com/${data.data.id}.png`,
+              uid: image.uid,
+            };
+            console.log(u, 'data');
+            this.setState({ imgArr: [...this.state.imgArr, u] });
+            if (this.state.imgArr.length === this.state.imageList.length) {
+              const newValues = {
+                ...values,
+                motorbikeType_id: {
+                  __type: 'Pointer',
+                  className: 'motorbikeType',
+                  objectId: values.motorbikeType_id,
+                },
+                image: this.state.imgArr[0].url,
+                shop_id: {
+                  __type: 'Pointer',
+                  className: 'shop',
+                  objectId: this.props.shop_id,
+                },
+                is_available: true,
+                images: this.state.imgArr,
+              };
+              this.props.addListMotorbike(newValues, this.props.shop_id);
+              this.setState({ imgArr: [] });
+              this.setState({ imageList: [] });
+            }
+          })
+          .catch(error => {
+            console.error(error);
+            // alert('Upload failed: ' + error);
+          });
 
-      const newValues = {
-        ...values,
-        motorbikeType_id: {
-          __type: 'Pointer',
-          className: 'motorbikeType',
-          objectId: values.motorbikeType_id,
-        },
-        shop_id: {
-          __type: 'Pointer',
-          className: 'shop',
-          objectId: this.props.shop_id,
-        },
-      };
-      this.props.addListMotorbike(newValues, this.props.shop_id);
-      // this.props.editListMotorbike(newValues);
+        return null;
+      });
     });
   };
-  // handleEdit = () => {
-  //   const form = this.formRef.props.form;
-  //   form.validateFields((err, values) => {
-  //     if (err) {
-  //       return;
-  //     }
-  //     this.props.editListMotorbike(this.state.rowData.objectId, values);
-  //   });
-  // };
+
   handleEdit = () => {
     const form = this.formRef.props.form;
     form.validateFields((err, values) => {
+      console.log(this.state.imageList.length !== 0);
+      console.log(values, this.state.imageList, 'trc khi sua');
+
       if (err) {
         return;
       }
-      const newValues = {
-        ...values,
-        motorbikeType_id: {
-          __type: 'Pointer',
-          className: 'motorbikeType',
-          objectId: values.motorbikeType_id,
-        },
-        shop_id: {
-          __type: 'Pointer',
-          className: 'shop',
-          objectId: this.props.shop_id,
-        },
-      };
-      console.log(newValues, 'sdadedirtttt');
-      this.props.editListMotorbike(this.state.rowData.objectId, newValues, this.props.shop_id);
+
+      console.log(this.state.imageList, 'anh');
+
+      this.state.imageList.map(image => {
+        if (_.has(image, 'name')) {
+          const formData = new FormData();
+          const a = _.replace(image.thumbUrl, new RegExp('data:image/png;base64', 'g'), '');
+          formData.append('image', a);
+          formData.append('type', 'base64');
+          fetch('https://api.imgur.com/3/image/', {
+            // mode: 'cors',
+            method: 'POST',
+            headers: {
+              Authorization: 'Client-ID 5a1a4901a3533b4',
+            },
+            body: formData,
+          })
+            .then(res => {
+              return res.json();
+            })
+            .then(data => {
+              const u = {
+                url: `https://i.imgur.com/${data.data.id}.png`,
+                uid: image.uid,
+              };
+              console.log(u, 'data');
+              this.setState({ imgArr: [...this.state.imgArr, u] });
+              if (this.state.imgArr.length === this.state.imageList.length) {
+                const newValues = {
+                  ...values,
+                  motorbikeType_id: {
+                    __type: 'Pointer',
+                    className: 'motorbikeType',
+                    objectId: values.motorbikeType_id,
+                  },
+                  image: this.state.imgArr[0].url,
+                  shop_id: {
+                    __type: 'Pointer',
+                    className: 'shop',
+                    objectId: this.props.shop_id,
+                  },
+                  is_available: true,
+                  images: this.state.imgArr,
+                };
+                this.props.editListMotorbike(
+                  this.state.rowData.objectId,
+                  newValues,
+                  this.props.shop_id,
+                );
+                this.setState({ imgArr: [] });
+                this.setState({ imageList: [] });
+              }
+            })
+            .catch(error => {
+              console.error(error);
+              // alert('Upload failed: ' + error);
+            });
+        } else {
+          this.setState({ imgArr: [...this.state.imgArr, image] });
+          if (this.state.imgArr.length === this.state.imageList.length) {
+            const newValues = {
+              ...values,
+              motorbikeType_id: {
+                __type: 'Pointer',
+                className: 'motorbikeType',
+                objectId: values.motorbikeType_id,
+              },
+              image: this.state.imgArr[0].url,
+              shop_id: {
+                __type: 'Pointer',
+                className: 'shop',
+                objectId: this.props.shop_id,
+              },
+              is_available: true,
+              images: this.state.imgArr,
+            };
+            this.props.editListMotorbike(
+              this.state.rowData.objectId,
+              newValues,
+              this.props.shop_id,
+            );
+            this.setState({ imgArr: [] });
+            this.setState({ imageList: [] });
+          }
+        }
+
+        return null;
+      });
     });
   };
 
@@ -237,6 +343,7 @@ class Motorbike extends Component {
               </Button>
               {this.props.addMotorbikeModal && (
                 <MotorbikeModal
+                  getPropsFromChild={this.getPropsFromChild}
                   wrappedComponentRef={this.saveFormRef}
                   text="Create"
                   title="Tạo một xe mới"
@@ -249,6 +356,7 @@ class Motorbike extends Component {
                 <MotorbikeModal
                   wrappedComponentRef={this.saveFormRef}
                   name="editMotorbikeModal"
+                  getPropsFromChild={this.getPropsFromChild}
                   text="Edit"
                   title="Chỉnh sửa xe"
                   saveFormRef={this.saveFormRef}
@@ -295,7 +403,6 @@ Motorbike.propTypes = {
 
 export default connect(
   state => {
-    console.log(state.motorbike.listMotorbike, 'stateupdateaui');
     return {
       shop_id: state.login.shop_id,
       listMotorbike: state.motorbike.listMotorbike,
@@ -311,8 +418,8 @@ export default connect(
       // fetchListMotorType: () => {
       //   dispatch(fetchListMotorTypesThunk());
       // },
-      addListMotorbike: (value, id) => {
-        dispatch(addListMotorbikeThunk(value, id));
+      addListMotorbike: (value, id, shopId) => {
+        dispatch(addListMotorbikeThunk(value, id, shopId));
       },
       editListMotorbike: (id, value, shopId) => {
         dispatch(editListMotorbikeThunk(id, value, shopId));
@@ -320,6 +427,7 @@ export default connect(
       delListMotorbike: (data, shopId) => {
         dispatch(deleteListMotorbikeThunk(data, shopId));
       },
+
       toggleModal: (name, status) => dispatch(toggleModal(name, status)),
     };
   },

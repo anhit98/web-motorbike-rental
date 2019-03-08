@@ -31,17 +31,27 @@ export function fetchListMotorbikeThunk(id) {
   };
 }
 
-export function addListMotorbikeThunk(value, id) {
+export function addListMotorbikeThunk(value, shopId) {
+  console.log(value, 'imagein thunk');
   return dispatch => {
     apiWrapper(dispatch, post('/classes/motorbike', value))
       .then(results => {
-        dispatch(fetchListMotorbikeThunk(id));
+        dispatch(fetchListMotorbikeThunk(shopId));
         dispatch(toggleModal('addMotorbikeModal', false));
       })
       .catch();
   };
 }
-
+export function parseImgThunk(img, name) {
+  console.log(img, 'image trong thunk');
+  return dispatch => {
+    apiWrapper(dispatch, post('/files/pic.jpg', `@${img}`))
+      .then(results => {
+        console.log(results, 'anhaaaaaaaaaaaaaaaaa');
+      })
+      .catch();
+  };
+}
 export function editListMotorbikeThunk(id, value, shopId) {
   console.log(value, 'môtrrthnunkkkkkkk');
   return dispatch => {
@@ -53,11 +63,11 @@ export function editListMotorbikeThunk(id, value, shopId) {
       .catch();
   };
 }
-export function deleteListMotorbikeThunk(data, id) {
+export function deleteListMotorbikeThunk(data, shopId) {
   return dispatch => {
     apiWrapper(dispatch, del(`/classes/motorbike/${data.objectId}`))
       .then(() => {
-        dispatch(fetchListMotorbikeThunk(id));
+        dispatch(fetchListMotorbikeThunk(shopId));
         dispatch(delListMotorbike(data));
       })
       .catch();
