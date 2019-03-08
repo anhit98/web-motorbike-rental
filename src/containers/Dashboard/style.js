@@ -99,7 +99,7 @@ const HomeWrapper = styled.div`
     color: red;
   }
   .double-table {
-    width: 48.666667%;
+    width: 39.35%;
   }
   .renter p {
     font-size: 12px;

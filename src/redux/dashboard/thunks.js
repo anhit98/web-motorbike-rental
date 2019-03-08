@@ -1,4 +1,5 @@
 import { apiWrapper } from '../reduxCreator';
+import moment from 'moment';
 import { get } from '../../api/ParseAPI';
 import {
   countRenters,
@@ -7,7 +8,7 @@ import {
   countPayments,
   fetchListRenters,
   fetchListMotorbike,
-  fetchListPayments,
+  fetchListPaymentHis
 } from './actions';
 
 export function fetchCountRentersThunk(id) {
@@ -99,6 +100,24 @@ export function fetchListMotorbikeThunk(id) {
     )
       .then(data => {
         dispatch(fetchListMotorbike(data.count));
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+}
+
+export function fetchListPaymentHisThunk(id) {
+  return dispatch => {
+
+    apiWrapper(dispatch, get(
+      `/classes/order?include=motor_id&include=user_id&where={"is_cancel":false,"is_finished":false,"shop_id":{"__type":"Pointer","className":"shop","objectId":"${id}"}}`,
+    ),
+      false,
+    )
+      .then(data => {
+        console.log(data, "dadadadadadaddadaadda");
+        dispatch(fetchListPaymentHis(data.results));
       })
       .catch(err => {
         console.log(err);

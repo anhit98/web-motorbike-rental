@@ -9,6 +9,7 @@ export const initialState = {
   listMotorbike: 0,
   listRenters: [],
   listPayment: [],
+  listPaymentHis: [],
 };
 
 const countRenters = (state, action) => {
@@ -53,6 +54,12 @@ const fetchListPayments = (state, action) => {
     listPayment: action.data,
   };
 };
+const fetchListPaymentHis = (state, action) => {
+  return {
+    ...state,
+    listPaymentHis: action.data,
+  };
+};
 export const dashboard = makeReducerCreator(initialState, {
   [Dashboard.FETCH_NORENTER]: countRenters,
   [Dashboard.FETCH_NOMOTOR]: countMotor,
@@ -61,4 +68,5 @@ export const dashboard = makeReducerCreator(initialState, {
   [Dashboard.FETCH_LISTMOTORBIKE]: fetchListMotorbike,
   [Dashboard.FETCH_LISTPAYMENT]: fetchListPayments,
   [Dashboard.FETCH_LISTRENTER]: fetchListRenters,
+  [Dashboard.FETCH_LISTPAYMENTHIS]: fetchListPaymentHis,
 });
