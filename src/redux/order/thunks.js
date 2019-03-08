@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { apiWrapper } from '../reduxCreator';
-import { get, put, post, del } from '../../api/ParseAPI';
+import { get, put, del, post } from '../../api/ParseAPI';
 import {
   fetchListOrder,
   deleteListOrder,

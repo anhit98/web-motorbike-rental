@@ -12,6 +12,8 @@ import { motortypes } from './motorbiketype/reducer';
 import { toggleModals } from './toggleModal/reducer';
 import { togglemodal } from './modals/reducer';
 import { renters } from './renters/reducer';
+import { dashboard } from './dashboard/reducer';
+
 
 
 export default combineReducers({
@@ -28,4 +30,5 @@ export default combineReducers({
   motorbike,
   payment,
   order,
+  dashboard,
 });

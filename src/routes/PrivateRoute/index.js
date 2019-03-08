@@ -22,7 +22,7 @@ const authorizedRoutes = [
   {
     path: '/',
     component: Loadable({
-      loader: () => import('../../containers/Profile'),
+      loader: () => import('../../containers/Dashboard'),
       loading: Loading,
     }),
     exact: true,
@@ -67,7 +67,7 @@ const authorizedRoutes = [
 ];
 
 class PrivateRoute extends Component {
-  componentDidMount() {}
+  componentDidMount() { }
   render() {
     const { match } = this.props;
     return (
