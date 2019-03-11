@@ -269,7 +269,7 @@ class Order extends Component {
   handleAdd = data => {
     // console.log(data, "khong ai biet");
     const newPayment = {
-      motorvbike_id: {
+      motorbike_id: {
         __type: 'Pointer',
         className: 'motorbike',
         objectId: data.motor_id.objectId,
