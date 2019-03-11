@@ -10,6 +10,8 @@ export const initialState = {
   listRenters: [],
   listPayment: [],
   listPaymentHis: [],
+  listOrder: [],
+
 };
 
 const countRenters = (state, action) => {
@@ -60,6 +62,24 @@ const fetchListPaymentHis = (state, action) => {
     listPaymentHis: action.data,
   };
 };
+const updateListOrder = (state, action) => {
+  return {
+    ...state,
+    listOrder: [
+      ...state.listOrder.map(
+        object => (object.objectId === action.data.objectId ? action.data : object),
+      ),
+    ],
+    isOrderFormOpen: false,
+  };
+};
+const fetchListOrder = (state, action) => {
+
+  return {
+    ...state,
+    listOrder: action.data,
+  };
+};
 export const dashboard = makeReducerCreator(initialState, {
   [Dashboard.FETCH_NORENTER]: countRenters,
   [Dashboard.FETCH_NOMOTOR]: countMotor,
@@ -69,4 +89,6 @@ export const dashboard = makeReducerCreator(initialState, {
   [Dashboard.FETCH_LISTPAYMENT]: fetchListPayments,
   [Dashboard.FETCH_LISTRENTER]: fetchListRenters,
   [Dashboard.FETCH_LISTPAYMENTHIS]: fetchListPaymentHis,
+  [Dashboard.UPDATE_ORDER]: updateListOrder,
+  [Dashboard.FETCH_ORDER]: fetchListOrder,
 });

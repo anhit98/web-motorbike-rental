@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Table, Row, Col, Tag, Popconfirm, Calendar } from 'antd';
+import { Table, Row, Col, Tag, Popconfirm, Calendar, Button } from 'antd';
 import moment from 'moment';
 import PageHeader from '../../components/utility/PageHeader';
 import LayoutWrapper from '../../components/utility/LayoutWrapper';
@@ -13,7 +13,11 @@ import {
   fetchCountPaymentsThunk,
   fetchListRentersThunk,
   fetchListMotorbikeThunk,
-  fetchListPaymentHisThunk
+  fetchListPaymentHisThunk,
+  updateListMotorbikeThunk,
+  updateListOrderThunk,
+  fetchListMotorbikeThunks,
+  fetchListOrderThunk
 
 
 } from '../../redux/dashboard/thunks';
@@ -24,22 +28,25 @@ import _ from 'lodash';
 
 const columnsPaymentRight = [
   {
-    title: 'Tên người đặt',
-    dataIndex: 'user_id.username',
-    key: 'user_id.username',
-    width: '18%',
+    title: 'Người đặt',
+    dataIndex: 'user_id',
+    key: 'user_id',
+    width: '10%',
+    render: (value, record) => {
+      return <span>{record.user_id.username}<br /> SĐT:{record.user_id.phoneNumber}</span>;
+    },
   },
   {
     title: 'Đơn hàng',
     dataIndex: 'motor_id.name',
     key: 'motor_id.name',
-    width: '18%',
+    width: '10%',
   },
   {
-    title: 'Ngày đặt hàng',
+    title: 'Ngày đặt',
     dataIndex: 'createdAt',
     key: 'createdAt',
-    width: '18%',
+    width: '10%',
     render: value => {
       return moment(value).format('DD-MM-YYYY');
     },
@@ -48,7 +55,7 @@ const columnsPaymentRight = [
     title: 'Ngày trả',
     dataIndex: 'createdAt',
     key: 'createdAt',
-    width: '18%',
+    width: '10%',
     render: (record, value) => {
       // console.log(record, value.total_days_rented, "tong ngay 123");
       return moment(value.createdAt)
@@ -60,35 +67,83 @@ const columnsPaymentRight = [
   {
     title: 'Số ngày quá hạn',
     key: 'nowDate',
-    width: '20%',
+    width: '10%',
 
     render: (record, value) => {
       // console.log(record, value, "tong ngay 12347624826445");
       // console.log(moment().format('DD'), "momentmonejej");
-      return moment().date() - moment(value.createdAt)
-        .add(value.total_days_rented, 'days')
-        .date();
+      let timeDate = moment().diff(moment(value.createdAt).add(value.total_days_rented, 'days'), 'days');
+
+      return timeDate;
     },
+  },
+  {
+    title: 'Hành động',
+    className: 'column-center',
+    key: 'action',
+    width: '10%',
+    render: (value, record) => (
+      <div>
+        <span>
+          <Popconfirm
+            title="Bạn có chắc chắn không?"
+            onConfirm={() => this.handleAdd(record)}
+            okText="Đồng ý"
+            cancelText="Trả xe"
+          >
+            <Button
+              className="btn"
+              style={{ width: 65 }}
+              disabled={record.is_cancel || record.is_finished}
+              type="primary"
+            >
+              Trả xe
+            </Button>
+          </Popconfirm>
+        </span>
+
+        <span>
+          <Popconfirm
+            title="Bạn chắc chắn muốn hủy đơn hàng?"
+            onConfirm={() => this.handleUpdate(record)}
+            okText="Đồng ý"
+            cancelText="Hủy bỏ"
+          >
+            <Button
+              className="btn"
+              style={{ width: 65 }}
+              disabled={record.is_cancel || record.is_finished}
+              type="danger"
+            >
+              Hủy
+            </Button>
+          </Popconfirm>
+        </span>
+      </div>
+    ),
   },
 ];
 const columnsPaymentLeft = [
   {
-    title: 'Tên người đặt',
-    dataIndex: 'user_id.username',
-    key: 'user_id.username',
-    width: '18%',
+    title: 'Người đặt',
+    dataIndex: 'user_id',
+    key: 'user_id',
+    width: '10%',
+    render: (value, record) => {
+      return <span>{record.user_id.username}<br /> SĐT:{record.user_id.phoneNumber}</span>;
+    },
   },
   {
     title: 'Đơn hàng',
     dataIndex: 'motor_id.name',
     key: 'motor_id.name',
-    width: '18%',
+    width: '10%',
   },
   {
-    title: 'Ngày đặt hàng',
+    title: 'Ngày đặt',
     dataIndex: 'createdAt',
     key: 'createdAt',
-    width: '18%',
+    width: '10%',
     render: value => {
       return moment(value).format('hh:mm:ss-DD-MM-YYYY');
     },
@@ -97,7 +152,7 @@ const columnsPaymentLeft = [
     title: 'Thời gian nhận xe',
     dataIndex: 'createdAt',
     key: 'createdAt',
-    width: '18%',
+    width: '8%',
     render: (record, value) => {
       // console.log(record, value.total_days_rented, "tong ngay 123");
       return moment(value.createdAt)
@@ -107,17 +162,43 @@ const columnsPaymentLeft = [
     },
   },
   {
-    title: 'Số giờ quá hạn(cùng ngày đặt)',
+    title: 'Số giờ quá hạn',
     key: 'nowDate',
-    width: '18%',
+    width: '9%',
 
     render: (record, value) => {
       // console.log(record, value, "tong ngay 12347624826445");
       // console.log(moment().format('DD'), "momentmonejej");
-      return moment().hours() - moment(value.createdAt)
-        .add(value.total_days_rented, 'days')
-        .hours();
+      let timeDate1 = moment().diff(moment(value.createdAt).add(3, 'hours'), 'hours');
+      return timeDate1;
     },
+  },
+  {
+    title: 'Hành động',
+    className: 'column-center',
+    key: 'action',
+    width: '10%',
+    render: (value, record) => (
+      <div>
+        <span>
+          <Popconfirm
+            title="Bạn chắc chắn muốn hủy đơn hàng?"
+            onConfirm={() => this.handleUpdate(record)}
+            okText="Đồng ý"
+            cancelText="Hủy bỏ"
+          >
+            <Button
+              className="btn"
+              style={{ width: 65 }}
+              disabled={record.is_cancel || record.is_finished}
+              type="danger"
+            >
+              Hủy
+            </Button>
+          </Popconfirm>
+        </span>
+      </div>
+    ),
   },
 ];
 
@@ -136,11 +217,57 @@ class Home extends Component {
     this.props.fetchListRenters(this.props.shop_id);
     this.props.countMotor(this.props.shop_id, newdueDate.toISOString(), moment().toISOString());
     this.props.countTotalMotors(this.props.shop_id);
-    this.props.fetchListMotorbkie(this.props.shop_id);
+    this.props.fetchListMotorbike(this.props.shop_id);
     this.props.fetchListPaymentHis(this.props.shop_id);
     this.props.countPayments(this.props.shop_id, newdueDate.toISOString(), moment().toISOString());
+    this.props.fetchListOrder(this.props.shop_id);
 
   }
+  handleUpdate = data => {
+    const newValues = {
+      motor_id: {
+        __type: 'Pointer',
+        className: 'motorbike',
+        objectId: data.motor_id.objectId,
+      },
+      shop_id: {
+        __type: 'Pointer',
+        className: 'shop',
+        objectId: data.shop_id.objectId,
+      },
+      user_id: {
+        __type: 'Pointer',
+        className: '_User',
+        objectId: data.user_id.objectId,
+      },
+      is_shipping: data.is_shipping,
+      is_cancel: true,
+      total_days_rented: data.total_days_rented,
+      is_finished: data.is_finished,
+      total_price: data.total_price,
+    };
+    this.props.updateListMotor(data);
+    const newMotor = {
+      motorbikeType_id: {
+        __type: 'Pointer',
+        className: 'motorbikeType',
+        objectId: data.motor_id.motorbikeType_id.objectId,
+      },
+      shop_id: {
+        __type: 'Pointer',
+        className: 'shop',
+        objectId: data.shop_id.objectId,
+      },
+      name: data.motor_id.name,
+      is_available: true,
+      license_plate: data.motor_id.license_plate,
+      image: data.motor_id.image,
+      description: data.motor_id.description,
+      rent_price: data.motor_id.rent_price,
+    };
+    this.props.updateListOrder(newValues, data.objectId, this.props.shop_id);
+    this.props.updateListMotor(newMotor, data.motor_id.objectId, this.props.shop_id);
+  };
 
 
   formatCurrency(value) {
@@ -176,6 +303,24 @@ class Home extends Component {
     function onPanelChange(value, mode) {
       console.log(value, mode);
     }
+    const newDate = [];
+    console.log(newDate, "gfjdgf1222222");
+    _.forEach(this.props.listPaymentHis, order => {
+      let timeDate2 = moment().diff(moment(order.createdAt).add(order.total_days_rented, 'days'), 'days');
+      console.log(timeDate2, "ok ok ok ok");
+      if (timeDate2 > 0)
+        newDate.push(order);
+    });
+    const newHour = [];
+    console.log(newHour, "gfjdgf1222222hour");
+    _.forEach(this.props.listPaymentHis, order => {
+      let timeToday = moment().format('hh:mm:ss-DD-MM-YYYY');
+      console.log(timeToday, "ok ok ok ok123");
+      let timeDate3 = moment().diff(moment(order.createdAt).add(3, 'hours'), 'hours');
+      console.log(timeDate3, "ok ok ok ok");
+      if (timeDate3 > 0 && timeToday)
+        newHour.push(order);
+    })
     return (
       <HomeWrapper>
         <LayoutWrapper>
@@ -237,7 +382,7 @@ class Home extends Component {
                     <b>Danh sách các đơn hàng quá hạn thanh toán</b>
                   </p>
                   <Table
-                    dataSource={this.props.listPaymentHis}
+                    dataSource={newDate}
                     pagination={false}
                     columns={columnsPaymentRight}
                   />
@@ -248,7 +393,7 @@ class Home extends Component {
                   <p className="title">
                     <b>Danh sách các đơn hàng quá hạn nhận xe</b>
                   </p>
-                  <Table dataSource={this.props.listPaymentHis} columns={columnsPaymentLeft} />
+                  <Table dataSource={newHour} columns={columnsPaymentLeft} />
                 </div>
               </Col>
               {/* <Col className="double-table" span={5}> */}
@@ -283,6 +428,9 @@ Home.propTypes = {
   shop_id: PropTypes.string,
   listPaymentHis: PropTypes.array,
   fetchListPaymentHis: PropTypes.func,
+  updateListMotor: PropTypes.func,
+  updateListOrder: PropTypes.func,
+  fetchListOrder: PropTypes.func,
 
 };
 
@@ -304,6 +452,9 @@ export default connect(
 
   dispatch => {
     return {
+      fetchListOrder: id => {
+        dispatch(fetchListOrderThunk(id));
+      },
       countRenters: value => {
         dispatch(fetchCountRentersThunk(value));
       },
@@ -319,11 +470,17 @@ export default connect(
       fetchListRenters: value => {
         dispatch(fetchListRentersThunk(value));
       },
-      fetchListMotorbkie: value => {
-        dispatch(fetchListMotorbikeThunk(value));
+      fetchListMotorbike: value => {
+        dispatch(fetchListMotorbikeThunks(value));
       },
       fetchListPaymentHis: (id) => {
         dispatch(fetchListPaymentHisThunk(id));
+      },
+      updateListMotor: (data, id, shop_id) => {
+        dispatch(updateListMotorbikeThunk(data, id, shop_id));
+      },
+      updateListOrder: (data, id, shop_id) => {
+        dispatch(updateListOrderThunk(data, id, shop_id));
       },
 
     };
