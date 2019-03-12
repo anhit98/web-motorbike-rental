@@ -8,9 +8,10 @@ export const Dashboard = makeConstantCreator(
   'FETCH_LISTMOTORBIKE',
   'FETCH_LISTPAYMENT',
   'FETCH_LISTRENTER',
-  'FETCH_LISTPAYMENTHIS',
+  'FETCH_RIGHTORDER',
   'UPDATE_ORDER',
   'FETCH_ORDER',
+  'FETCH_LEFTORDER',
 );
 export const countRenters = data => makeActionCreator(Dashboard.FETCH_NORENTER, { data });
 export const countMotor = data => makeActionCreator(Dashboard.FETCH_NOMOTOR, { data });
@@ -20,8 +21,7 @@ export const fetchListRenters = data => makeActionCreator(Dashboard.FETCH_LISTRE
 export const fetchListMotorbike = data =>
   makeActionCreator(Dashboard.FETCH_LISTMOTORBIKE, { data });
 export const fetchListPayments = data => makeActionCreator(Dashboard.FETCH_LISTPAYMENT, { data });
-export const fetchListPaymentHis = data =>
-  makeActionCreator(Dashboard.FETCH_LISTPAYMENTHIS, { data });
+export const fetchLeftOrder = data => makeActionCreator(Dashboard.FETCH_LEFTORDER, { data });
+export const fetchRightOrder = data => makeActionCreator(Dashboard.FETCH_RIGHTORDER, { data });
 export const updateListOrder = data => makeActionCreator(Dashboard.UPDATE_ORDER, { data });
 export const fetchListOrder = data => makeActionCreator(Dashboard.FETCH_ORDER, { data });
-
