@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import { Table, Button, Icon, Popconfirm, Tag } from 'antd';
+import Fuse from 'fuse.js';
+import { Table, Button, Icon, Popconfirm, Input, Tag } from 'antd';
 import PageHeader from '../../components/utility/PageHeader';
 import LayoutWrapper from '../../components/utility/LayoutWrapper';
 import IntlMessages from '../../components/utility/intlMessages';
@@ -16,6 +17,7 @@ import MotorbikeStyle from './style';
 import MotorbikeModal from './../MotorbikeModal/index';
 import { toggleModal } from './../../redux/modals/actions';
 // import { fetchListMotorTypesThunk } from '../../redux/motorbiketype/thunks';
+const Search = Input.Search;
 
 export function formatCurrency(value) {
   if (value) {
@@ -142,8 +144,27 @@ class Motorbike extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.listMotorbike !== nextProps.listMotorbike) {
       this.setState({ listDataMotorbike: nextProps.listMotorbike });
+      console.log(nextProps.listMotorbike, 'fdsssssssssssssss');
     }
   }
+  onSearching = value => {
+    if (_.isEmpty(value)) {
+      this.setState({ listDataMotorbike: this.props.listMotorbike });
+    } else {
+      console.log('ds');
+      const options = {
+        keys: ['is_available', 'license_plate', 'motorbikeType_id.name', 'name', 'rent_price'],
+      };
+      const fuse = new Fuse(this.props.listMotorbike, options);
+      if (_.isEmpty(fuse.search(value))) {
+        console.log('d');
+        this.setState({ listDataMotorbike: [] });
+      } else {
+        console.log('safffffff');
+        this.setState({ listDataMotorbike: fuse.search(value) });
+      }
+    }
+  };
   // handler function
   getPropsFromChild = images => {
     console.log(images, 'list base64');
@@ -336,7 +357,17 @@ class Motorbike extends Component {
     return (
       <MotorbikeStyle>
         <LayoutWrapper>
+          <PageHeader>
+            <IntlMessages id="sidebar.motorbike" />
+          </PageHeader>
           <div className="header">
+            <div className="filter">
+              <Search
+                placeholder="Nhập từ khóa của bạn..."
+                onSearch={this.onSearching}
+                style={{ width: 200 }}
+              />
+            </div>
             <div className="button-group">
               <Button type="primary" onClick={this.showModalAdd}>
                 Thêm xe mới
@@ -366,22 +397,9 @@ class Motorbike extends Component {
               )}
             </div>
           </div>
-
-          <LayoutWrapper>
-            <PageHeader>
-              <IntlMessages id="sidebar.motorbike" />
-            </PageHeader>
-            <div className="isoLayoutContent">
-              <Table
-                dataSource={
-                  _.isEmpty(this.state.listDataMotorbike)
-                    ? this.props.listMotorbike
-                    : this.state.listDataMotorbike
-                }
-                columns={this.columns}
-              />
-            </div>
-          </LayoutWrapper>
+          <div className="isoLayoutContent">
+            <Table dataSource={this.state.listDataMotorbike} columns={this.columns} />
+          </div>
         </LayoutWrapper>
       </MotorbikeStyle>
     );

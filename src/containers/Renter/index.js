@@ -1,97 +1,64 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Table, Avatar, Input, Button, Icon } from 'antd';
+import { Table, Avatar, Input } from 'antd';
 import _ from 'lodash';
+import Fuse from 'fuse.js';
 import PropTypes from 'prop-types';
-import Highlighter from 'react-highlight-words';
 import PageHeader from '../../components/utility/PageHeader';
 import LayoutWrapper from '../../components/utility/LayoutWrapper';
 import IntlMessages from '../../components/utility/intlMessages';
 import { fetchListRentersThunk } from '../../redux/renters/thunks';
 import RenterWrapper from './style';
 
-// import admin from '../../assets/images/admin.png';
+const Search = Input.Search;
 class Renter extends Component {
   state = {
     selectedRow: null,
-    searchText: '',
+    listDataRenter: [],
   };
 
   componentDidMount() {
     this.props.fetchListRenters(this.props.shop_id);
     console.log(this.props.listRenters, 'hiuhiu');
   }
-  getColumnSearchProps = dataIndex => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-      <div style={{ padding: 8 }}>
-        <Input
-          ref={node => {
-            this.searchInput = node;
-          }}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
-          style={{ width: 188, marginBottom: 8, display: 'block' }}
-        />
-        <Button
-          type="primary"
-          onClick={() => this.handleSearch(selectedKeys, confirm)}
-          icon="search"
-          size="small"
-          style={{ width: 90, marginRight: 8 }}
-        >
-          Search
-        </Button>
-        <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
-          Reset
-        </Button>
-      </div>
-    ),
-    filterIcon: filtered => (
-      <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
-    ),
-    onFilter: (value, record) =>
-      record[dataIndex]
-        .toString()
-        .toLowerCase()
-        .includes(value.toLowerCase()),
-    onFilterDropdownVisibleChange: visible => {
-      if (visible) {
-        setTimeout(() => this.searchInput.select());
+  componentWillReceiveProps(nextProps) {
+    if (this.props.listRenters !== nextProps.listRenters) {
+      this.setState({ listDataRenter: nextProps.listRenters });
+    }
+  }
+  onSearching = value => {
+    if (_.isEmpty(value)) {
+      console.log('ds');
+      this.setState({ listDataRenter: this.props.listRenters });
+    } else {
+      console.log('ds');
+      const options = {
+        keys: ['user_id.username', 'user_id.phoneNumber'],
+      };
+      const fuse = new Fuse(this.props.listRenters, options);
+      if (_.isEmpty(fuse.search(value))) {
+        console.log('d');
+        this.setState({ listDataRenter: [] });
+      } else {
+        console.log('safffffff');
+        this.setState({ listDataRenter: fuse.search(value) });
       }
-    },
-    render: text => (
-      <Highlighter
-        highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-        searchWords={[this.state.searchText]}
-        autoEscape
-        textToHighlight={text.toString()}
-      />
-    ),
-  });
-
-  handleSearch = (selectedKeys, confirm) => {
-    confirm();
-    this.setState({ searchText: selectedKeys[0] });
+    }
   };
-
-  handleReset = clearFilters => {
-    clearFilters();
-    this.setState({ searchText: '' });
-  };
-
   render() {
-    const result = [];
-    _.forEach(this.props.listRenters, renter => {
-      const name = renter.user_id.objectId;
-      const isExist = _.find(result, data => data.user_id.objectId === name);
-      console.log(isExist, 'isEifd');
-      if (!isExist) {
-        result.push(renter);
-      }
-    });
-
+    let result = [];
+    if (_.isEmpty(this.state.listDataRenter)) {
+      result = [];
+    } else {
+      _.forEach(this.state.listDataRenter, renter => {
+        const name = renter.user_id.objectId;
+        const isExist = _.find(result, data => data.user_id.objectId === name);
+        console.log(isExist, 'isEifd');
+        if (!isExist) {
+          result.push(renter);
+        }
+      });
+    }
     const columns = [
       {
         title: 'Họ và tên',
@@ -100,7 +67,6 @@ class Renter extends Component {
         render: (value, record) => {
           return <p>{record.user_id.username}</p>;
         },
-        // ...this.getColumnSearchProps('username'),
       },
       {
         title: 'Tuổi',
@@ -168,7 +134,13 @@ class Renter extends Component {
           <PageHeader>
             <IntlMessages id="sidebar.renters" />
           </PageHeader>
-
+          <div className="filter">
+            <Search
+              placeholder="Nhập từ khóa của bạn..."
+              onSearch={this.onSearching}
+              style={{ width: 200, marginBottom: 10 }}
+            />
+          </div>
           <div className="isoLayoutContent">
             <Table dataSource={result} columns={columns} />
           </div>
