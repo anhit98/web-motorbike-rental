@@ -39,6 +39,7 @@
     "redux": "^3.7.0",
     "redux-react-i18n": "^1.1.0",
     "redux-thunk": "^2.3.0",
+    "selenium-webdriver": "^4.0.0-alpha.1",
     "styled-components": "^3.1.4",
     "styled-theme": "^0.3.3"
   },
