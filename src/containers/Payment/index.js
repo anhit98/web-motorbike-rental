@@ -49,16 +49,6 @@ class Payment extends Component {
           return <p>{record.user.phoneNumber}</p>;
         },
       },
-      {
-        title: 'Tuổi',
-        dataIndex: 'user',
-        className: 'column-center',
-        key: 'user',
-        width: '6%',
-        render: (value, record) => {
-          return <p>{record.user.age}</p>;
-        },
-      },
 
       {
         title: 'Tên xe',

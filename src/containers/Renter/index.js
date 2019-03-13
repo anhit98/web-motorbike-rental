@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Table, Avatar } from 'antd';
+import { Table, Avatar, Input } from 'antd';
 import _ from 'lodash';
+import Fuse from 'fuse.js';
 import PropTypes from 'prop-types';
 import PageHeader from '../../components/utility/PageHeader';
 import LayoutWrapper from '../../components/utility/LayoutWrapper';
@@ -9,28 +10,55 @@ import IntlMessages from '../../components/utility/intlMessages';
 import { fetchListRentersThunk } from '../../redux/renters/thunks';
 import RenterWrapper from './style';
 
-// import admin from '../../assets/images/admin.png';
+const Search = Input.Search;
 class Renter extends Component {
   state = {
     selectedRow: null,
+    listDataRenter: [],
   };
 
   componentDidMount() {
     this.props.fetchListRenters(this.props.shop_id);
     console.log(this.props.listRenters, 'hiuhiu');
   }
-
-  render() {
-    const result = [];
-    _.forEach(this.props.listRenters, renter => {
-      const name = renter.user_id.objectId;
-      const isExist = _.find(result, data => data.user_id.objectId === name);
-      console.log(isExist, 'isEifd');
-      if (!isExist) {
-        result.push(renter);
+  componentWillReceiveProps(nextProps) {
+    if (this.props.listRenters !== nextProps.listRenters) {
+      this.setState({ listDataRenter: nextProps.listRenters });
+    }
+  }
+  onSearching = value => {
+    if (_.isEmpty(value)) {
+      console.log('ds');
+      this.setState({ listDataRenter: this.props.listRenters });
+    } else {
+      console.log('ds');
+      const options = {
+        keys: ['user_id.username', 'user_id.phoneNumber'],
+      };
+      const fuse = new Fuse(this.props.listRenters, options);
+      if (_.isEmpty(fuse.search(value))) {
+        console.log('d');
+        this.setState({ listDataRenter: [] });
+      } else {
+        console.log('safffffff');
+        this.setState({ listDataRenter: fuse.search(value) });
       }
-    });
-
+    }
+  };
+  render() {
+    let result = [];
+    if (_.isEmpty(this.state.listDataRenter)) {
+      result = [];
+    } else {
+      _.forEach(this.state.listDataRenter, renter => {
+        const name = renter.user_id.objectId;
+        const isExist = _.find(result, data => data.user_id.objectId === name);
+        console.log(isExist, 'isEifd');
+        if (!isExist) {
+          result.push(renter);
+        }
+      });
+    }
     const columns = [
       {
         title: 'Họ và tên',
@@ -64,7 +92,7 @@ class Renter extends Component {
         render: (value, record) => {
           return (
             <div>
-              <Avatar src={record.user_id.avatar.url} />
+              <Avatar src={record.user_id.avatar} />
             </div>
           );
         },
@@ -106,7 +134,13 @@ class Renter extends Component {
           <PageHeader>
             <IntlMessages id="sidebar.renters" />
           </PageHeader>
-
+          <div className="filter">
+            <Search
+              placeholder="Nhập từ khóa của bạn..."
+              onSearch={this.onSearching}
+              style={{ width: 200, marginBottom: 10 }}
+            />
+          </div>
           <div className="isoLayoutContent">
             <Table dataSource={result} columns={columns} />
           </div>
