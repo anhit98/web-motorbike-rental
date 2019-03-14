@@ -4,18 +4,20 @@ import { get } from '../../api/ParseAPI';
 
 export function loginThunk(username, password) {
   return dispatch => {
-    apiWrapper(dispatch, get(`/login?username=${username}&password=${password}`)).then(response => {
-      if (response && response.sessionToken && response.isAdmin === true) {
-        sessionStorage.setItem('sessionToken', response.sessionToken);
-        dispatch(login(response));
-      }
-    });
+    apiWrapper(dispatch, get(`/login?username=${username}&password=${password}`), false).then(
+      response => {
+        if (response && response.sessionToken && response.isAdmin === true) {
+          sessionStorage.setItem('sessionToken', response.sessionToken);
+          dispatch(login(response));
+        }
+      },
+    );
   };
 }
 
 export const getCurrentUserThunk = () => {
   return dispatch => {
-    apiWrapper(dispatch, get('/users/me'), false)
+    apiWrapper(dispatch, get('/users/me'))
       .then(data => {
         console.log(data, 'thunkanhhhhhh');
         dispatch(login(data));
@@ -28,7 +30,7 @@ export const getCurrentUserThunk = () => {
 
 export function getCurentUser() {
   return dispatch => {
-    apiWrapper(dispatch, get('/users/me'), false).then(data => {
+    apiWrapper(dispatch, get('/users/me')).then(data => {
       dispatch(curent(data));
     });
   };
