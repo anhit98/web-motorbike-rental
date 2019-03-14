@@ -54,16 +54,6 @@ class Order extends Component {
           return <p>{record.user_id.phoneNumber}</p>;
         },
       },
-      {
-        title: 'Tuổi',
-        dataIndex: 'user_id',
-        className: 'column-center',
-        key: 'user_id',
-        width: '5%',
-        render: (value, record) => {
-          return <p>{record.user_id.age}</p>;
-        },
-      },
 
       {
         title: 'Tên xe',
@@ -240,7 +230,7 @@ class Order extends Component {
       is_shipping: data.is_shipping,
       is_cancel: true,
       total_days_rented: data.total_days_rented,
-      is_finished: data.is_finished,
+      is_finished: true,
       total_price: data.total_price,
     };
     this.props.updateListMotor(data);
@@ -269,7 +259,7 @@ class Order extends Component {
   handleAdd = data => {
     // console.log(data, "khong ai biet");
     const newPayment = {
-      motorvbike_id: {
+      motorbike_id: {
         __type: 'Pointer',
         className: 'motorbike',
         objectId: data.motor_id.objectId,
