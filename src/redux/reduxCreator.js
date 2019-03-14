@@ -51,7 +51,7 @@ export const apiWrapper = (dispatch, apiFunc, isShowSuccessNoti = true, ms = 100
           success({
             title: 'Done',
             message: 'Process sucessfully',
-            autoDismiss: 1,
+            autoDismiss: 3,
           }),
         );
       }
@@ -66,7 +66,7 @@ export const apiWrapper = (dispatch, apiFunc, isShowSuccessNoti = true, ms = 100
           message:
             err && err.message ? err.message : 'Server Internall Error. Please try later !!!!',
           position: 'tr',
-          autoDismiss: 10,
+          autoDismiss: 3,
         }),
       );
       throw err;
