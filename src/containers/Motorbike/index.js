@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import Fuse from 'fuse.js';
+import moment from 'moment';
 import { Table, Button, Icon, Popconfirm, Input, Tag } from 'antd';
 import PageHeader from '../../components/utility/PageHeader';
 import LayoutWrapper from '../../components/utility/LayoutWrapper';
@@ -40,6 +41,13 @@ class Motorbike extends Component {
       listDataMotorbike: [],
     };
     this.columns = [
+      {
+        title: 'ID',
+        dataIndex: 'objectId',
+        className: 'column-center',
+        key: 'objectId',
+        width: '10%',
+      },
       {
         title: 'Tên xe',
         dataIndex: 'name',
@@ -101,6 +109,9 @@ class Motorbike extends Component {
         className: 'column-center',
         key: 'createdAt',
         width: '12%',
+        render: value => {
+          return moment(value).format('DD-MM-YYYY');
+        },
       },
       {
         title: 'Hành động',
@@ -256,7 +267,10 @@ class Motorbike extends Component {
       console.log(values, this.state.imageList, 'trc khi sua');
 
       if (err) {
+        // if (_.isEmpty(err.images && err.images.errors)) {
+        // console.log(_.isEmpty(err.images && err.images.errors), 'tdsfd sua');
         return;
+        // }
       }
 
       console.log(this.state.imageList, 'anh');
@@ -285,6 +299,11 @@ class Motorbike extends Component {
               };
               console.log(u, 'data');
               this.setState({ imgArr: [...this.state.imgArr, u] });
+              console.log(
+                this.state.imgArr.length === this.state.imageList.length,
+                'successsssssssss',
+              );
+
               if (this.state.imgArr.length === this.state.imageList.length) {
                 const newValues = {
                   ...values,
@@ -318,6 +337,7 @@ class Motorbike extends Component {
         } else {
           this.setState({ imgArr: [...this.state.imgArr, image] });
           if (this.state.imgArr.length === this.state.imageList.length) {
+            console.log('successsssssssss');
             const newValues = {
               ...values,
               motorbikeType_id: {
