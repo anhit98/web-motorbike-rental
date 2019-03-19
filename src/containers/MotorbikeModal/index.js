@@ -28,12 +28,16 @@ class MotorbikeModal extends Component {
     this.state = {
       previewVisible: false,
       previewImage: '',
-      fileList: [],
+      fileList: _.isEmpty(this.props.data.images) ? [] : this.props.data.images,
     };
   }
   componentDidMount() {
     this.props.fetchListMotorType();
+    if (!_.isEmpty(this.props.data.images)) {
+      this.props.getPropsFromChild(this.state.fileList);
+    }
   }
+
   handlePreview = file => {
     this.setState({
       previewImage: file.url || file.thumbUrl,
@@ -43,7 +47,7 @@ class MotorbikeModal extends Component {
 
   handleChange = ({ fileList }) => {
     this.setState({ fileList });
-    console.log(this.state.fileList, 'imagesssssssssssssdvdvbfsss');
+    console.log(fileList, 'imagesssssssssssssdvdvbfsss');
     this.props.getPropsFromChild(this.state.fileList);
   };
 
@@ -131,7 +135,11 @@ class MotorbikeModal extends Component {
                     }
                   >
                     {this.props.listMotor.map(motortype => (
-                      <Option key={motortype.objectId} value={motortype.objectId}>
+                      <Option
+                        key={motortype.objectId}
+                        id={motortype.objectId}
+                        value={motortype.objectId}
+                      >
                         {motortype.name}
                       </Option>
                     ))}
@@ -160,26 +168,30 @@ class MotorbikeModal extends Component {
           <Row gutter={12}>
             <Col span={24}>
               <FormItem label="Hình ảnh">
-                {getFieldDecorator('images', {
-                  rules: [
-                    {
-                      required: true,
-                      message: 'Vui lòng nhập trường này!',
-                      len: '1',
-                      min: '0',
-                    },
-                  ],
-                  initialValue: this.props.data && this.props.data.images,
-                })(
+                {getFieldDecorator(
+                  'images',
+                  _.isEmpty(this.state.fileList)
+                    ? {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Vui lòng nhập trường này!',
+                            len: '1',
+                            min: '0',
+                          },
+                        ],
+                      }
+                    : '',
+                )(
                   <div className="clearfix">
                     <Upload
                       action="//jsonplaceholder.typicode.com/posts/"
                       listType="picture-card"
-                      fileList={_.isEmpty(fileList) ? this.props.data.images : fileList}
+                      fileList={fileList}
                       onPreview={this.handlePreview}
                       onChange={this.handleChange}
                     >
-                      {fileList.length >= 8 ? null : uploadButton}
+                      {fileList.length >= 4 ? null : uploadButton}
                     </Upload>
                     <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
                       <img alt="example" style={{ width: '100%' }} src={previewImage} />
