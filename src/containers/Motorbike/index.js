@@ -369,7 +369,7 @@ class Motorbike extends Component {
               />
             </div>
             <div className="button-group">
-              <Button type="primary" onClick={this.showModalAdd}>
+              <Button type="primary" style={{ marginLeft: 100 }} onClick={this.showModalAdd}>
                 Thêm xe mới
               </Button>
               {this.props.addMotorbikeModal && (

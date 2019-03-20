@@ -59,16 +59,19 @@ export const apiWrapper = (dispatch, apiFunc, isShowSuccessNoti = true, ms = 100
     })
     .catch(err => {
       dispatch(changeMainLoadingStatus(false));
-      dispatch(
-        error({
-          // uid: 'once-please', // you can specify your own uid if required
-          title: 'Error',
-          message:
-            err && err.message ? err.message : 'Server Internall Error. Please try later !!!!',
-          position: 'tr',
-          autoDismiss: 3,
-        }),
-      );
+      console.log(err, 'fdsfcds');
+      if (err.message !== 'Invalid session token') {
+        dispatch(
+          error({
+            // uid: 'once-please', // you can specify your own uid if required
+            title: 'Error',
+            message:
+              err && err.message ? err.message : 'Server Internall Error. Please try later !!!!',
+            position: 'tr',
+            autoDismiss: 3,
+          }),
+        );
+      }
       throw err;
     });
 };
