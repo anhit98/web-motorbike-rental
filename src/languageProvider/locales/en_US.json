@@ -103,5 +103,32 @@
     "avatar": "Avatar",
     "ordertimes": "Times of ordering",
     "canceltimes": "Times of canceling"
+  },
+  "motor": {
+    "title": "Motorbike management",
+    "add": "Add new motorbike",
+    "search": "Enter your search key...",
+    "name": "Name",
+    "type": "Motorbike type",
+    "licence": "License plate",
+    "price": "Price",
+    "description": "Description",
+    "status": "Status",
+    "createdDate": "Created Date",
+    "action": "Action",
+    "avail": "Available",
+    "noAvail": "Unavailable",
+    "suretodel": "Are you sure want to delete?",
+    "cancel": "Cancel",
+    "agree": "Yes",
+    "createMotor": "Create new motorbike",
+    "image": "Images",
+    "editMotor": "Edit",
+    "delMotor": "Delete",
+    "upload": "Upload",
+    "fillRequire": "Please fill this field!",
+    "yes": "Yes",
+    "no": "No",
+    "sure": "Are you sure?"
   }
 }
