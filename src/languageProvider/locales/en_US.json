@@ -1,5 +1,11 @@
 {
   "sidebar.dashboard": "Dashboard",
+  "sidebar.motorbiketype": "Motortype management",
+  "sidebar.bookings": "Rental management",
+  "sidebar.renter": "Renter management",
+  "sidebar.renters": "Renter management",
+  "sidebar.rooms": "Category management",
+  "sidebar.manage_motel": "Motobike management",
   "sidebar.motorbike": "Motorbike",
   "sidebar.order": "Order",
   "sidebar.paymentManage": "History of Payment",
@@ -63,5 +69,30 @@
   "modal.paymentManage.columnStatus": "Status",
   "modal.paymentManage.columnRenter": "Renter",
   "modal.paymentManage.columnRoom": "Room",
-  "modal.paymentManage.columndo": "Action"
+  "modal.paymentManage.columndo": "Action",
+  "home": {
+    "totalcus": "Total Customer",
+    "totalorder": "Number of Order",
+    "availmotor": "Số xe có sẵn",
+    "totalrevenue": "Tổng thu tháng",
+    "detail": "Xem chi tiết",
+    "lefttable": "Danh sách các đơn hàng quá hạn thanh toán",
+    "righttable": "Danh sách các đơn hàng quá hạn nhận xe",
+    "renter": "Người đặt",
+    "order": "Đơn hàng",
+    "orderdate": "Ngày đặt",
+    "paydate": "Ngày trả",
+    "expireday": "Số ngày quá hạn",
+    "action": "Hành động",
+    "expirehour": "Số giờ quá hạn",
+    "getmotortime": "Thời gian nhận xe",
+    "returnmotor": "Trả xe",
+    "keeporder": "Giữ lại",
+    "cancelorder": "Hủy",
+    "ok": "Đồng ý",
+    "sure": "Bạn có chắc chắn không?",
+    "suretokeeporder": "Bạn có chắc muốn chuyển đơn hàng về trạng thái bình thường không?",
+    "suretocancelorder": "Bạn chắc chắn muốn hủy đơn hàng?",
+    "dashboard": "Trang chủ"
+  }
 }

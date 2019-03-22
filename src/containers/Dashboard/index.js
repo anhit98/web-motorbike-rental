@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
+import { setTranslations, translate } from 'react-switch-lang';
 import { Table, Row, Col, Tag, Popconfirm, Calendar, Button } from 'antd';
 import moment from 'moment';
 import PageHeader from '../../components/utility/PageHeader';
@@ -21,11 +23,14 @@ import {
   fetchListOrderThunk,
   updateCheckOrderThunk,
 } from '../../redux/dashboard/thunks';
+import en from '../../languageProvider/locales/en_US.json';
+import th from '../../languageProvider/locales/vi_VN.json';
 import { addListPaymentThunk, updateStatusThunk } from '../../redux/order/thunks';
 
 import HomeWrapper from './style';
 import Card from './Card/index';
-import _ from 'lodash';
+
+setTranslations({ en, th });
 
 class Home extends Component {
   constructor(props) {
@@ -35,7 +40,7 @@ class Home extends Component {
     };
     this.columnsPaymentRight = [
       {
-        title: 'Người đặt',
+        title: this.props.t('home.title'),
         dataIndex: 'user_id',
         key: 'user_id',
         width: '10%',
@@ -221,8 +226,10 @@ class Home extends Component {
       this.props.fetchRightOrder(nextProps.shop_id);
       this.props.countPayments(nextProps.shop_id, newdueDate.toISOString(), moment().toISOString());
       this.props.fetchListOrder(nextProps.shop_id);
+      this.props.countRenters(nextProps.shop_id);
     }
   }
+
   handleUpdate = data => {
     const newValues = {
       motor_id: {
@@ -498,6 +505,7 @@ Home.propTypes = {
   addListPayment: PropTypes.func,
   updateStatus: PropTypes.func,
   updateCheckOrder: PropTypes.func,
+  t: PropTypes.func.isRequired,
 };
 
 export default connect(
@@ -562,4 +570,4 @@ export default connect(
       },
     };
   },
-)(Home);
+)(translate(Home));

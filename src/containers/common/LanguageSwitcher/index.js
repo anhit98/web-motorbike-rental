@@ -16,7 +16,6 @@ const LanguageSwitcher = ({ language, changeLanguage }) => {
           const { languageId, icon } = option;
           const customClass =
             languageId === language.languageId ? 'selectedTheme languageSwitch' : 'languageSwitch';
-
           return (
             <button
               type="button"

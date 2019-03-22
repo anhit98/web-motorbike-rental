@@ -1,13 +1,27 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import {
+  setTranslations,
+  setLanguageCookie,
+  setDefaultLanguage,
+  setLanguage,
+  translate,
+} from 'react-switch-lang';
 import { Form } from 'antd';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Input from '../../components/uielements/input';
 import Button from '../../components/uielements/button';
 import { loginThunk, logoutThunk, getCurrentUserThunk } from '../../redux/login/thunks';
-import IntlMessages from '../../components/utility/intlMessages';
+import en from '../../languageProvider/locales/en_US.json';
+import th from '../../languageProvider/locales/vi_VN.json';
 import SignInStyleWrapper from './style';
+// Do this two lines only when setting up the application
+setTranslations({ en, th });
+setDefaultLanguage('en');
+
+// If you want to remember selected language
+setLanguageCookie('language', { path: '/', maxAge: 157680000 }, undefined);
 
 const FormItem = Form.Item;
 class SignIn extends Component {
@@ -32,6 +46,10 @@ class SignIn extends Component {
       this.setState({ redirectToReferrer: true });
     }
   }
+
+  handleSetLanguage = key => () => {
+    setLanguage(key);
+  };
 
   handleUserNameChange = e => {
     this.setState({ username: e.target.value });
@@ -65,66 +83,75 @@ class SignIn extends Component {
       return <Redirect to={from} />;
     }
     return (
-      <SignInStyleWrapper className="isoSignInPage">
-        <div className="titleWrapper">
-          <Link className="titleStyle" to="/dashboard">
-            Motorbike
-          </Link>
-          <Link to="/dashboard" className="titleStyle titleMargin">
-            Rental
-          </Link>
-        </div>
-        <Form className="loginForm" onSubmit={this.handleLogin}>
-          <div className="isoLoginContentWrapper">
-            <div className="isoLoginContent">
-              <div className="isoLogoWrapper">
-                <Link to="/dashboard">Đăng nhập</Link>
-              </div>
-
-              <div className="isoSignInForm">
-                <div className="isoInputWrapper">
-                  <FormItem>
-                    {getFieldDecorator('username', {
-                      rules: [{ required: true, message: 'Please enter your username!' }],
-                    })(
-                      <Input
-                        size="large"
-                        name="username"
-                        placeholder="Username"
-                        setfieldsvalue={this.state.username}
-                        onChange={this.handleUserNameChange}
-                        required
-                      />,
-                    )}
-                  </FormItem>
+      <div>
+        <SignInStyleWrapper className="isoSignInPage">
+          <div className="titleWrapper">
+            <Link className="titleStyle" to="/dashboard">
+              Motorbike
+            </Link>
+            <Link to="/dashboard" className="titleStyle titleMargin">
+              Rental
+            </Link>
+          </div>
+          <Form className="loginForm" onSubmit={this.handleLogin}>
+            <div className="isoLoginContentWrapper">
+              <div className="isoLoginContent">
+                <div className="isoLogoWrapper">
+                  <Link to="/dashboard">Đăng nhập</Link>
                 </div>
 
-                <div className="isoInputWrapper">
-                  <FormItem>
-                    {getFieldDecorator('password', {
-                      rules: [{ required: true, message: 'Please enter your password!' }],
-                    })(
-                      <Input
-                        size="large"
-                        type="password"
-                        placeholder="Password"
-                        setfieldsvalue={this.state.password}
-                        onChange={this.handlePasswordChange}
-                        required
-                      />,
-                    )}
-                  </FormItem>
-                </div>
-                <div className="isoInputWrapper isoLeftRightComponent">
-                  <Button type="primary" className="btnStyle" htmlType="submit">
-                    OK
-                  </Button>
+                <div className="isoSignInForm">
+                  <div className="isoInputWrapper">
+                    <FormItem>
+                      {getFieldDecorator('username', {
+                        rules: [{ required: true, message: 'Please enter your username!' }],
+                      })(
+                        <Input
+                          size="large"
+                          name="username"
+                          placeholder="Username"
+                          setfieldsvalue={this.state.username}
+                          onChange={this.handleUserNameChange}
+                          required
+                        />,
+                      )}
+                    </FormItem>
+                  </div>
+
+                  <div className="isoInputWrapper">
+                    <FormItem>
+                      {getFieldDecorator('password', {
+                        rules: [{ required: true, message: 'Please enter your password!' }],
+                      })(
+                        <Input
+                          size="large"
+                          type="password"
+                          placeholder="Password"
+                          setfieldsvalue={this.state.password}
+                          onChange={this.handlePasswordChange}
+                          required
+                        />,
+                      )}
+                    </FormItem>
+                  </div>
+                  <div className="isoInputWrapper isoLeftRightComponent">
+                    <Button type="primary" className="btnStyle" htmlType="submit">
+                      OK
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </Form>
-      </SignInStyleWrapper>
+          </Form>
+        </SignInStyleWrapper>
+        <div>
+          {this.props.t('home.title')}
+
+          <button type="button" onClick={this.handleSetLanguage('en')}>
+            Switch language
+          </button>
+        </div>
+      </div>
     );
   }
 }
@@ -134,6 +161,7 @@ SignIn.propTypes = {
   login: PropTypes.func,
   form: PropTypes.object,
   fetchListCurentUser: PropTypes.func,
+  t: PropTypes.func.isRequired,
 };
 
 const createForm = Form.create()(SignIn);
@@ -152,4 +180,4 @@ export default connect(
       dispatch(getCurrentUserThunk());
     },
   }),
-)(createForm);
+)(translate(createForm));
