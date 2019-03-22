@@ -37,7 +37,7 @@ export function fetchCountMotorThunk(id, newdate, momentdate) {
     apiWrapper(
       dispatch,
       get(
-        `/classes/payment?&where={"shop":{"__type":"Pointer","className":"shop","objectId":"${id}"}, "updatedAt":{"$gte":{"__type":"Date","iso":"${newdate}"},"$lte":{"__type":"Date","iso":"${momentdate}"}}}&count=1&limit=0`,
+        `/classes/order?&where={"shop":{"__type":"Pointer","className":"shop","objectId":"${id}"}, "updatedAt":{"$gte":{"__type":"Date","iso":"${newdate}"},"$lte":{"__type":"Date","iso":"${momentdate}"}}}&count=1&limit=0`,
       ),
       false,
     )

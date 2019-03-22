@@ -233,7 +233,6 @@ class Order extends Component {
       is_finished: true,
       total_price: data.total_price,
     };
-    this.props.updateListMotor(data);
     const newMotor = {
       motorbikeType_id: {
         __type: 'Pointer',

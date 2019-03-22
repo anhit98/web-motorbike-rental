@@ -4,11 +4,16 @@ import { Table, Avatar, Input } from 'antd';
 import _ from 'lodash';
 import Fuse from 'fuse.js';
 import PropTypes from 'prop-types';
+import { setTranslations, translate } from 'react-switch-lang';
+import en from '../../languageProvider/locales/en_US.json';
+import th from '../../languageProvider/locales/vi_VN.json';
 import PageHeader from '../../components/utility/PageHeader';
 import LayoutWrapper from '../../components/utility/LayoutWrapper';
 import IntlMessages from '../../components/utility/intlMessages';
 import { fetchListRentersThunk } from '../../redux/renters/thunks';
 import RenterWrapper from './style';
+
+setTranslations({ en, th });
 
 const Search = Input.Search;
 class Renter extends Component {
@@ -61,7 +66,7 @@ class Renter extends Component {
     }
     const columns = [
       {
-        title: 'Họ và tên',
+        title: this.props.t('renter.fullname'),
         dataIndex: 'username',
         key: 'username',
         render: (value, record) => {
@@ -69,24 +74,16 @@ class Renter extends Component {
         },
       },
       {
-        title: 'Tuổi',
-        dataIndex: 'age',
-        key: 'age',
+        title: this.props.t('renter.phone'),
+        dataIndex: 'phone_number',
+        key: 'phone_number',
         render: (value, record) => {
-          return <p>{record.user_id.age}</p>;
-        },
-      },
-      {
-        title: 'Số điện thoại',
-        dataIndex: 'phoneNumber',
-        key: 'phoneNumber',
-        render: (value, record) => {
-          return <p>{record.user_id.phoneNumber}</p>;
+          return <p>{record.phone_number}</p>;
         },
       },
 
       {
-        title: 'Ảnh đại diện',
+        title: this.props.t('renter.avatar'),
         dataIndex: 'avatar',
         key: 'avatar',
         render: (value, record) => {
@@ -98,7 +95,7 @@ class Renter extends Component {
         },
       },
       {
-        title: 'Số lần đặt xe',
+        title: this.props.t('renter.ordertimes'),
         dataIndex: 'count',
         key: 'count',
 
@@ -113,7 +110,7 @@ class Renter extends Component {
         },
       },
       {
-        title: 'Số lần hủy đặt xe',
+        title: this.props.t('renter.canceltimes'),
         dataIndex: 'count',
         key: 'count',
 
@@ -131,12 +128,10 @@ class Renter extends Component {
     return (
       <RenterWrapper>
         <LayoutWrapper>
-          <PageHeader>
-            <IntlMessages id="sidebar.renters" />
-          </PageHeader>
+          <PageHeader>{this.props.t('renter.title')}</PageHeader>
           <div className="filter">
             <Search
-              placeholder="Nhập từ khóa của bạn..."
+              placeholder={this.props.t('renter.search')}
               onSearch={this.onSearching}
               style={{ width: 200, marginBottom: 10 }}
             />
@@ -154,6 +149,7 @@ Renter.propTypes = {
   fetchListRenters: PropTypes.func,
   listRenters: PropTypes.array,
   shop_id: PropTypes.string,
+  t: PropTypes.func.isRequired,
 };
 
 export default connect(
@@ -170,4 +166,4 @@ export default connect(
       },
     };
   },
-)(Renter);
+)(translate(Renter));

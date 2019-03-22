@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Col, Icon } from 'antd';
 import { Link } from 'react-router-dom';
+import { setTranslations, translate } from 'react-switch-lang';
+import en from '../../../languageProvider/locales/en_US.json';
+import th from '../../../languageProvider/locales/vi_VN.json';
+
+setTranslations({ en, th });
 
 class Card extends Component {
   constructor(props) {
@@ -10,7 +15,16 @@ class Card extends Component {
   }
 
   render() {
-    const { title, countNumber, linkRoute, typeIcon, styleIcon, styleCountNumber, stylebackground, styleLink } = this.props;
+    const {
+      title,
+      countNumber,
+      linkRoute,
+      typeIcon,
+      styleIcon,
+      styleCountNumber,
+      stylebackground,
+      styleLink,
+    } = this.props;
     return (
       <Col className="card" span={5} style={stylebackground}>
         <div className="content">
@@ -31,7 +45,7 @@ class Card extends Component {
             <hr className="__web-inspector-hide-shortcut__" />
             <div className="stats">
               <Link className="link" to={linkRoute} style={styleLink}>
-                <span >Xem chi tiết</span>
+                <span>{this.props.t('home.detail')}</span>
                 <Icon type="double-right" style={{ float: 'right', marginTop: '6px' }} />
               </Link>
             </div>
@@ -49,6 +63,9 @@ Card.propTypes = {
   title: PropTypes.string,
   styleIcon: PropTypes.object,
   styleCountNumber: PropTypes.object,
+  stylebackground: PropTypes.object,
+  styleLink: PropTypes.object,
+  t: PropTypes.func.isRequired,
 };
 
-export default Card;
+export default translate(Card);

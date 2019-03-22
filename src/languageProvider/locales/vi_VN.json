@@ -80,7 +80,7 @@
     "totalcus": "Tổng khách hàng",
     "totalorder": "Số lượng đặt hàng",
     "availmotor": "Số xe có sẵn",
-    "totalrevenue": "Tổng thu tháng",
+    "totalrevenue": "Tổng thu tháng - ",
     "detail": "Xem chi tiết",
     "lefttable": "Danh sách các đơn hàng quá hạn thanh toán",
     "righttable": "Danh sách các đơn hàng quá hạn nhận xe",
@@ -100,5 +100,14 @@
     "suretokeeporder": "Bạn có chắc muốn chuyển đơn hàng về trạng thái bình thường không?",
     "suretocancelorder": "Bạn chắc chắn muốn hủy đơn hàng?",
     "dashboard": "Trang chủ"
+  },
+  "renter": {
+    "title": "Quản lý khách hàng",
+    "search": "Nhập từ khóa của bạn...",
+    "fullname": "Họ và tên",
+    "phone": "Số điện thoại",
+    "avatar": "Ảnh đại diện",
+    "ordertimes": "Số lần đặt xe",
+    "canceltimes": "Số lần hủy đặt xe"
   }
 }
