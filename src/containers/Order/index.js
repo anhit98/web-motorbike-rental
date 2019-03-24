@@ -30,26 +30,7 @@ export function formatCurrency(value) {
   }
   return '0';
 }
-// "title": "Quản lí đơn đặt hàng",
-// "cusname": "Tên khách hàng",
-// "phone": "Số điện thoại",
-// "motorname": "Tên xe",
-// "license": "Biển số xe",
-// "orderday": "Số ngày đặt",
-// "total": "Tổng tiền",
-// "shipping": "Vận chuyển",
-// "orderdate": "Ngày đặt xe",
-// "returndate": "Ngày trả xe",
-// "status": "Trạng thái",
-// "action": "Hành động",
-// "normalStatus": "Bình thường",
-// "cancelStatus": "Đơn hàng đã bị hủy",
-// "returnmotor": "Trả xe",
-// "cancelorder": "Hủy",
-// "happening": "Đang diễn ra",
-// "end": "Đã kết thúc",
-// "suretocancelorder": "Bạn chắc chắn muốn hủy đơn hàng?",
-// "ok": "Đồng ý"
+
 class Order extends Component {
   constructor(props) {
     super(props);

@@ -130,5 +130,41 @@
     "yes": "Yes",
     "no": "No",
     "sure": "Are you sure?"
+  },
+  "order": {
+    "title": "Order management",
+    "cusname": "Renter name",
+    "phone": "Phone",
+    "motorname": "Motor name",
+    "license": "License plate",
+    "orderday": "Day number",
+    "total": "Total",
+    "shipping": "Shipping",
+    "orderdate": "Order date",
+    "returndate": "Return date",
+    "status": "Status",
+    "action": "Action",
+    "normalStatus": "Normal",
+    "cancelStatus": "Order was canceled",
+    "returnmotor": "Return",
+    "cancelorder": "Cancel",
+    "happening": "Happening",
+    "end": "FInished",
+    "suretocancelorder": "Are you sure want to cancel the order?",
+    "ok": "Yes",
+    "yes": "Yes",
+    "no": "No",
+    "sure": "Are you sure?"
+  },
+  "payment": {
+    "title": "Payment management",
+    "cusname": "Customer name",
+    "phone": "Phone number",
+    "motorname": "Motor name",
+    "license": "Lisense plate",
+    "orderday": "Day number",
+    "total": "Total",
+    "shippingamount": "Shipping Amount",
+    "returndate": "Return date"
   }
 }

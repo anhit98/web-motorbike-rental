@@ -140,7 +140,7 @@
     "phone": "Số điện thoại",
     "motorname": "Tên xe",
     "license": "Biển số xe",
-    "orderday": "Số ngày đặt",
+    "orderday": "Số ngày thuê",
     "total": "Tổng tiền",
     "shipping": "Vận chuyển",
     "orderdate": "Ngày đặt xe",
@@ -158,5 +158,16 @@
     "yes": "Có",
     "no": "Không",
     "sure": "Bạn có chắc chắn không?"
+  },
+  "payment": {
+    "title": "Quản lí thanh toán",
+    "cusname": "Tên khách hàng",
+    "phone": "Số điện thoại",
+    "motorname": "Tên xe",
+    "license": "Biển số xe",
+    "orderday": "Số ngày thuê",
+    "total": "Tổng tiền",
+    "shippingamount": "Phí vận chuyển",
+    "returndate": "Ngày trả xe"
   }
 }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-
+import { setTranslations, translate } from 'react-switch-lang';
 import { Table, Button, Input, Icon, Popconfirm, Tag } from 'antd';
 import PageHeader from '../../components/utility/PageHeader';
 import LayoutWrapper from '../../components/utility/LayoutWrapper';
@@ -10,7 +10,10 @@ import IntlMessages from '../../components/utility/intlMessages';
 import { fetchListPaymentThunk } from '../../redux/payment/thunks';
 import PaymentStyle from './style';
 import { toggleModal } from './../../redux/modals/actions';
+import en from '../../languageProvider/locales/en_US.json';
+import th from '../../languageProvider/locales/vi_VN.json';
 import _ from 'lodash';
+setTranslations({ en, th });
 
 export function formatCurrency(value) {
   if (value) {
@@ -32,7 +35,7 @@ class Payment extends Component {
     };
     this.columns = [
       {
-        title: 'Tên khách hàng',
+        title: this.props.t('payment.cusname'),
         dataIndex: 'user',
         className: 'column-center',
         key: 'user',
@@ -42,7 +45,7 @@ class Payment extends Component {
         },
       },
       {
-        title: 'Số điện thoại',
+        title: this.props.t('payment.phone'),
         dataIndex: 'user',
         className: 'column-center',
         key: 'user',
@@ -53,7 +56,7 @@ class Payment extends Component {
       },
 
       {
-        title: 'Tên xe',
+        title: this.props.t('payment.motorname'),
         dataIndex: 'motorbike_id',
         className: 'column-center',
         key: 'motorbike_id',
@@ -63,7 +66,7 @@ class Payment extends Component {
         },
       },
       {
-        title: 'Biển số xe',
+        title: this.props.t('payment.license'),
         dataIndex: 'motorbike_id',
         className: 'column-center',
         key: 'motorbike_id',
@@ -73,7 +76,7 @@ class Payment extends Component {
         },
       },
       {
-        title: 'Số ngày thuê',
+        title: this.props.t('payment.orderday'),
         dataIndex: 'order_id',
         className: 'column-center',
         key: 'order_id',
@@ -83,7 +86,7 @@ class Payment extends Component {
         },
       },
       {
-        title: 'Tổng tiền',
+        title: this.props.t('payment.total'),
         dataIndex: 'order_id',
         className: 'column-center',
         key: 'order_id',
@@ -94,7 +97,7 @@ class Payment extends Component {
       },
 
       {
-        title: 'Phí vận chuyển',
+        title: this.props.t('payment.shippingamount'),
         dataIndex: 'order_id',
         className: 'column-center',
         key: 'order_id',
@@ -108,7 +111,7 @@ class Payment extends Component {
       },
 
       {
-        title: 'Ngày trả',
+        title: this.props.t('payment.returndate'),
         dataIndex: 'createdAt',
         className: 'column-center',
         key: 'createdAt',
@@ -134,7 +137,7 @@ class Payment extends Component {
       <PaymentStyle>
         <LayoutWrapper>
           <PageHeader>
-            <IntlMessages id="sidebar.payment" />
+            {this.props.t('payment.title')}
           </PageHeader>
           <div className="isoLayoutContent">
             <Table
@@ -156,6 +159,7 @@ Payment.propTypes = {
   fetchListPayment: PropTypes.func,
   shop_id: PropTypes.string,
   listPayment: PropTypes.array,
+  t: PropTypes.func.isRequired
 };
 
 export default connect(
@@ -172,4 +176,4 @@ export default connect(
       },
     };
   },
-)(Payment);
+)(translate(Payment));
