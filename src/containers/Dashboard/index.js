@@ -445,7 +445,7 @@ class Home extends Component {
           </div>
           <div className="isoLayoutContent space">
             <Row type="flex" justify="space-between">
-              <Col className="double-table" span={10}>
+              <Col className="double-table" span={5}>
                 <div className="isoLayoutContent">
                   <p className="title">
                     <b>{this.props.t('home.lefttable')}</b>
@@ -457,7 +457,7 @@ class Home extends Component {
                   />
                 </div>
               </Col>
-              <Col className="double-table" span={10}>
+              <Col className="double-table" span={5}>
                 <div className="isoLayoutContent">
                   <p className="title">
                     <b>{this.props.t('home.righttable')}</b>
@@ -466,7 +466,7 @@ class Home extends Component {
                 </div>
               </Col>
               {/* <Col className="double-table" span={5}> */}
-              <div style={{ width: 300, border: '1px solid #d9d9d9', borderRadius: 4 }}>
+              <div className="calendar" style={{ border: '1px solid #d9d9d9', borderRadius: 4, marginTop: 10, marginLeft: 285 }}>
                 <Calendar fullscreen={false} onPanelChange={onPanelChange} />
               </div>
               {/* </Col> */}
