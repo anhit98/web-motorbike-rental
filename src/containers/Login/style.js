@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { palette } from 'styled-theme';
-import bgImage from '../../assets/images/image3.jpg';
+import bgImage from '../../assets/images/image.jpg';
 import WithDirection from '../../config/withDirection';
 
 const SignInStyleWrapper = styled.div`
@@ -29,6 +29,7 @@ const SignInStyleWrapper = styled.div`
 
   .loginForm {
     height: 100%;
+    background: transparent;
   }
 
   .isoLoginContentWrapper {
@@ -38,14 +39,35 @@ const SignInStyleWrapper = styled.div`
     z-index: 10;
     position: relative;
   }
-
+  .titleWrapper {
+    width: 34%;
+    height: 95%;
+    margin: 0 auto;
+    z-index: 15 !important;
+  }
+  .titleWrapper a {
+    margin: 0 auto;
+    font-size: 50px;
+    font-weight: 400;
+    color: #d3e2ed;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+  .titleMargin {
+    float: right;
+  }
+  .btnStyle {
+    margin: 0 auto;
+  }
+  .titleStyle {
+    display: block;
+  }
   .isoLoginContent {
     min-height: 100%;
     display: flex;
     flex-direction: column;
     padding: 70px 50px;
     position: relative;
-    background-color: #ffffff;
 
     @media only screen and (max-width: 767px) {
       width: 100%;
@@ -60,11 +82,11 @@ const SignInStyleWrapper = styled.div`
       flex-shrink: 0;
 
       a {
+        color: #d3e2ed;
         font-size: 24px;
         font-weight: 300;
         line-height: 1;
         text-transform: uppercase;
-        color: ${palette('secondary', 2)};
       }
     }
 

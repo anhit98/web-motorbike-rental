@@ -28,7 +28,7 @@ export const apiWrapper = (dispatch, apiFunc, isShowSuccessNoti = true, ms = 100
   const timeout = new Promise((resolve, reject) => {
     const id = setTimeout(() => {
       clearTimeout(id);
-      reject({ message: 'Request timeout. Please try again!!!!' });
+      reject({ message: 'Quá thời gian chờ. Vui lòng thử lại!!!!' });
     }, ms);
   });
 
@@ -49,8 +49,8 @@ export const apiWrapper = (dispatch, apiFunc, isShowSuccessNoti = true, ms = 100
       if (isShowSuccessNoti) {
         dispatch(
           success({
-            title: 'Done',
-            message: 'Process sucessfully',
+            title: 'Xong',
+            message: 'Thành công!',
             autoDismiss: 3,
           }),
         );
@@ -66,7 +66,7 @@ export const apiWrapper = (dispatch, apiFunc, isShowSuccessNoti = true, ms = 100
             // uid: 'once-please', // you can specify your own uid if required
             title: 'Error',
             message:
-              err && err.message ? err.message : 'Server Internall Error. Please try later !!!!',
+              err && err.message ? err.message : 'Lỗi server! Thử lại sau !!!!',
             position: 'tr',
             autoDismiss: 3,
           }),

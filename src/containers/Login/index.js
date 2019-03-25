@@ -66,13 +66,19 @@ class SignIn extends Component {
     }
     return (
       <SignInStyleWrapper className="isoSignInPage">
+        <div className="titleWrapper">
+          <Link className="titleStyle" to="/dashboard">
+            Motorbike
+          </Link>
+          <Link to="/dashboard" className="titleStyle titleMargin">
+            Rental
+          </Link>
+        </div>
         <Form className="loginForm" onSubmit={this.handleLogin}>
           <div className="isoLoginContentWrapper">
             <div className="isoLoginContent">
               <div className="isoLogoWrapper">
-                <Link to="/dashboard">
-                  <IntlMessages id="page.signInTitle" />
-                </Link>
+                <Link to="/dashboard">Đăng nhập</Link>
               </div>
 
               <div className="isoSignInForm">
@@ -110,8 +116,8 @@ class SignIn extends Component {
                   </FormItem>
                 </div>
                 <div className="isoInputWrapper isoLeftRightComponent">
-                  <Button type="primary" htmlType="submit">
-                    <IntlMessages id="page.signInButton" />
+                  <Button type="primary" className="btnStyle" htmlType="submit">
+                    OK
                   </Button>
                 </div>
               </div>

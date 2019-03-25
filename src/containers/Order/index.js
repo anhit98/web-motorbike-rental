@@ -39,7 +39,7 @@ class Order extends Component {
         dataIndex: 'user_id',
         className: 'column-center',
         key: 'user_id',
-        width: '8%',
+        width: '11%',
         render: (value, record) => {
           return <p>{record.user_id.username}</p>;
         },
@@ -80,7 +80,7 @@ class Order extends Component {
         dataIndex: 'total_days_rented',
         className: 'column-center',
         key: 'total_days_rented',
-        width: '6%',
+        width: '8%',
       },
 
       {
@@ -110,9 +110,9 @@ class Order extends Component {
         dataIndex: 'createdAt',
         className: 'column-center',
         key: 'createdAt',
-        width: '9%',
+        width: '12%',
         render: value => {
-          return moment(value).format('dddd, MMMM Do YYYY, h:mm:ss a');
+          return moment(value).format('hh:mm-DD-MM-YYYY');
         },
       },
       {
@@ -120,7 +120,7 @@ class Order extends Component {
         dataIndex: 'createdAt',
         className: 'column-center',
         key: 'createdAt',
-        width: '8%',
+        width: '9%',
         render: value => {
           return moment(value)
             .add(3, 'hour')
@@ -144,7 +144,7 @@ class Order extends Component {
         title: 'Hành động',
         className: 'column-center',
         key: 'action',
-        width: '10%',
+        width: '8%',
         render: (value, record) => (
           <div>
             <span>
@@ -191,7 +191,7 @@ class Order extends Component {
         dataIndex: 'is_finished',
         className: 'column-center',
         key: 'is_finished',
-        width: '7%',
+        width: '3%',
         render: (value, record) => {
           if (value === true) {
             return <Tag color="#f50">Đã kết thúc</Tag>;

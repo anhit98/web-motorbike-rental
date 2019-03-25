@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import moment from 'moment';
+
 import { Table, Button, Input, Icon, Popconfirm, Tag } from 'antd';
 import PageHeader from '../../components/utility/PageHeader';
 import LayoutWrapper from '../../components/utility/LayoutWrapper';
@@ -111,6 +113,9 @@ class Payment extends Component {
         className: 'column-center',
         key: 'createdAt',
         width: '12%',
+        render: value => {
+          return moment(value).format('DD-MM-YYYY');
+        },
       },
     ];
   }
