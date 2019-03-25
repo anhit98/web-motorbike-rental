@@ -5,9 +5,11 @@ import {
   setLanguageCookie,
   setDefaultLanguage,
   setLanguage,
+  getLanguage,
   translate,
 } from 'react-switch-lang';
-import { Form } from 'antd';
+import Flag from 'react-world-flags';
+import { Form, Select } from 'antd';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Input from '../../components/uielements/input';
@@ -18,8 +20,8 @@ import th from '../../languageProvider/locales/vi_VN.json';
 import SignInStyleWrapper from './style';
 // Do this two lines only when setting up the application
 setTranslations({ en, th });
-setDefaultLanguage('en');
-
+setDefaultLanguage('th');
+const Option = Select.Option;
 // If you want to remember selected language
 setLanguageCookie('language', { path: '/', maxAge: 157680000 }, undefined);
 
@@ -35,6 +37,7 @@ class SignIn extends Component {
   }
 
   componentDidMount() {
+    console.log(getLanguage(), 'current');
     this.props.fetchListCurentUser();
   }
 
@@ -47,9 +50,14 @@ class SignIn extends Component {
     }
   }
 
-  handleSetLanguage = key => () => {
-    setLanguage(key);
-  };
+  handleChange(value) {
+    console.log(value, 'fdgd');
+    if (value === 'Vietnamese') {
+      setLanguage('th');
+    } else {
+      setLanguage('en');
+    }
+  }
 
   handleUserNameChange = e => {
     this.setState({ username: e.target.value });
@@ -85,13 +93,29 @@ class SignIn extends Component {
     return (
       <div>
         <SignInStyleWrapper className="isoSignInPage">
-          <div className="titleWrapper">
-            <Link className="titleStyle" to="/dashboard">
-              Motorbike
-            </Link>
-            <Link to="/dashboard" className="titleStyle titleMargin">
-              Rental
-            </Link>
+          <div>
+            <Select
+              defaultValue={getLanguage() === 'en' ? 'English' : 'Vietnamese'}
+              style={{ width: 120 }}
+              onChange={this.handleChange}
+            >
+              <Option value="Vietnamese">
+                <Flag code="vn" height="14" style={{ marginRight: 3, marginTop: 4 }} />
+                <span>Vietnamese</span>
+              </Option>
+              <Option value="English">
+                <Flag code="us" height="13" style={{ marginRight: 3, width: 20, marginTop: 3 }} />
+                <span>English</span>
+              </Option>
+            </Select>
+            <div className="titleWrapper">
+              <Link className="titleStyle" to="/dashboard">
+                Motorbike
+              </Link>
+              <Link to="/dashboard" className="titleStyle titleMargin">
+                Rental
+              </Link>
+            </div>
           </div>
           <Form className="loginForm" onSubmit={this.handleLogin}>
             <div className="isoLoginContentWrapper">
@@ -144,13 +168,6 @@ class SignIn extends Component {
             </div>
           </Form>
         </SignInStyleWrapper>
-        <div>
-          {this.props.t('home.title')}
-
-          <button type="button" onClick={this.handleSetLanguage('en')}>
-            Switch language
-          </button>
-        </div>
       </div>
     );
   }
