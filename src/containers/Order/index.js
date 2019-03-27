@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import moment from 'moment';
+import { setTranslations, translate } from 'react-switch-lang';
 import { Table, Button, Popconfirm, Tag } from 'antd';
 import PageHeader from '../../components/utility/PageHeader';
 import LayoutWrapper from '../../components/utility/LayoutWrapper';
-import IntlMessages from '../../components/utility/intlMessages';
 import {
   fetchListOrderThunk,
   updateListOrderThunk,
@@ -14,7 +14,11 @@ import {
   addListPaymentThunk,
   updateStatusThunk,
 } from '../../redux/order/thunks';
+import en from '../../languageProvider/locales/en_US.json';
+import th from '../../languageProvider/locales/vi_VN.json';
 import OrderStyle from './style';
+
+setTranslations({ en, th });
 
 export function formatCurrency(value) {
   if (value) {
@@ -35,7 +39,7 @@ class Order extends Component {
     };
     this.columns = [
       {
-        title: 'Tên khách hàng',
+        title: this.props.t('order.cusname'),
         dataIndex: 'user_id',
         className: 'column-center',
         key: 'user_id',
@@ -45,7 +49,7 @@ class Order extends Component {
         },
       },
       {
-        title: 'Số điện thoại',
+        title: this.props.t('order.phone'),
         dataIndex: 'user_id',
         className: 'column-center',
         key: 'user_id',
@@ -56,7 +60,7 @@ class Order extends Component {
       },
 
       {
-        title: 'Tên xe',
+        title: this.props.t('order.motorname'),
         dataIndex: 'motor_id',
         className: 'column-center',
         key: 'motor_id',
@@ -66,7 +70,7 @@ class Order extends Component {
         },
       },
       {
-        title: 'Biển số xe',
+        title: this.props.t('order.license'),
         dataIndex: 'motor_id',
         className: 'column-center',
         key: 'motor_id',
@@ -76,7 +80,7 @@ class Order extends Component {
         },
       },
       {
-        title: 'Số ngày đặt',
+        title: this.props.t('order.orderday'),
         dataIndex: 'total_days_rented',
         className: 'column-center',
         key: 'total_days_rented',
@@ -84,7 +88,7 @@ class Order extends Component {
       },
 
       {
-        title: 'Tổng tiền',
+        title: this.props.t('order.total'),
         dataIndex: 'total_price',
         className: 'column-center',
         key: 'total_price',
@@ -92,21 +96,21 @@ class Order extends Component {
       },
 
       {
-        title: 'Vận chuyển',
+        title: this.props.t('order.shipping'),
         dataIndex: 'is_shipping',
         className: 'column-center',
         key: 'is_shipping',
         width: '9%',
         render: (value, record) => {
           if (value === true) {
-            return <span>Vận chuyển</span>;
+            return <span>{this.props.t('order.yes')}</span>;
           }
-          return <span>Không vận chuyển</span>;
+          return <span>{this.props.t('order.no')}</span>;
         },
       },
 
       {
-        title: 'Ngày đặt hàng',
+        title: this.props.t('order.orderdate'),
         dataIndex: 'createdAt',
         className: 'column-center',
         key: 'createdAt',
@@ -116,7 +120,7 @@ class Order extends Component {
         },
       },
       {
-        title: 'Ngày dự kiến',
+        title: this.props.t('order.returndate'),
         dataIndex: 'createdAt',
         className: 'column-center',
         key: 'createdAt',
@@ -124,24 +128,24 @@ class Order extends Component {
         render: value => {
           return moment(value)
             .add(3, 'hour')
-            .calendar();
+            .format('hh:mm-DD-MM-YYYY');
         },
       },
       {
-        title: 'Trạng thái',
+        title: this.props.t('order.status'),
         dataIndex: 'is_cancel',
         className: 'column-center',
         key: 'is_cancel',
         width: '8%',
         render: (value, record) => {
           if (value === true) {
-            return <span>Đơn hàng đã hủy</span>;
+            return <span>{this.props.t('order.cancelStatus')}</span>;
           }
-          return <span>Bình thường</span>;
+          return <span>{this.props.t('order.normalStatus')}</span>;
         },
       },
       {
-        title: 'Hành động',
+        title: this.props.t('order.action'),
         className: 'column-center',
         key: 'action',
         width: '8%',
@@ -149,10 +153,10 @@ class Order extends Component {
           <div>
             <span>
               <Popconfirm
-                title="Bạn có chắc chắn không?"
+                title={this.props.t('order.sure')}
                 onConfirm={() => this.handleAdd(record)}
-                okText="Đồng ý"
-                cancelText="Trả xe"
+                okText={this.props.t('order.ok')}
+                cancelText={this.props.t('order.returnmotor')}
               >
                 <Button
                   className="btn"
@@ -160,17 +164,17 @@ class Order extends Component {
                   disabled={record.is_cancel || record.is_finished}
                   type="primary"
                 >
-                  Trả xe
+                  {this.props.t('order.returnmotor')}
                 </Button>
               </Popconfirm>
             </span>
 
             <span>
               <Popconfirm
-                title="Bạn chắc chắn muốn hủy đơn hàng?"
+                title={this.props.t('order.suretocancelorder')}
                 onConfirm={() => this.handleUpdate(record)}
-                okText="Đồng ý"
-                cancelText="Hủy bỏ"
+                okText={this.props.t('order.ok')}
+                cancelText={this.props.t('order.cancelorder')}
               >
                 <Button
                   className="btn"
@@ -178,7 +182,7 @@ class Order extends Component {
                   disabled={record.is_cancel || record.is_finished}
                   type="danger"
                 >
-                  Hủy
+                  {this.props.t('order.cancelorder')}
                 </Button>
               </Popconfirm>
             </span>
@@ -194,9 +198,9 @@ class Order extends Component {
         width: '3%',
         render: (value, record) => {
           if (value === true) {
-            return <Tag color="#f50">Đã kết thúc</Tag>;
+            return <Tag color="#f50">{this.props.t('order.end')}</Tag>;
           }
-          return <Tag color="#2db7f5">Đang diễn ra</Tag>;
+          return <Tag color="#2db7f5">{this.props.t('order.happening')}</Tag>;
         },
       },
     ];
@@ -233,7 +237,6 @@ class Order extends Component {
       is_finished: true,
       total_price: data.total_price,
     };
-    this.props.updateListMotor(data);
     const newMotor = {
       motorbikeType_id: {
         __type: 'Pointer',
@@ -307,9 +310,7 @@ class Order extends Component {
     return (
       <OrderStyle>
         <LayoutWrapper>
-          <PageHeader>
-            <IntlMessages id="sidebar.order" />
-          </PageHeader>
+          <PageHeader>{this.props.t('order.title')}</PageHeader>
           <div className="isoLayoutContent">
             <Table
               dataSource={
@@ -334,6 +335,7 @@ Order.propTypes = {
   updateListMotor: PropTypes.func,
   addListPayment: PropTypes.func,
   updateStatus: PropTypes.func,
+  t: PropTypes.func.isRequired,
 };
 
 export default connect(
@@ -362,4 +364,4 @@ export default connect(
       },
     };
   },
-)(Order);
+)(translate(Order));

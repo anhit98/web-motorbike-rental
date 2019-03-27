@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Layout, Menu, Icon } from 'antd';
 import clone from 'clone';
+import { setTranslations, translate } from 'react-switch-lang';
+
 import { Scrollbars } from 'react-custom-scrollbars';
 import IntlMessages from '../../../components/utility/intlMessages';
 import { getCurrentTheme } from '../ThemeSwitcher/config';
@@ -11,6 +13,10 @@ import SidebarWrapper from './style';
 
 import Logo from '../../../components/utility/logo';
 import { rtl } from '../../../config/withDirection';
+import en from '../../../languageProvider/locales/en_US.json';
+import th from '../../../languageProvider/locales/vi_VN.json';
+
+setTranslations({ en, th });
 
 const SubMenu = Menu.SubMenu;
 const { Sider } = Layout;
@@ -84,9 +90,7 @@ class Sidebar extends Component {
                 <Link to={'/'}>
                   <span className="isoMenuHolder" style={submenuColor}>
                     <i className="anticon anticon-pie-chart" />
-                    <span className="nav-text">
-                      <IntlMessages id="sidebar.dashboard" />
-                    </span>
+                    <span className="nav-text">{this.props.t('sidebar.dashboard')}</span>
                   </span>
                 </Link>
               </Menu.Item>
@@ -95,9 +99,7 @@ class Sidebar extends Component {
                 <Link to={'/khach-hang'}>
                   <span className="isoMenuHolder" style={submenuColor}>
                     <i className="anticon anticon-user" />
-                    <span className="nav-text">
-                      <IntlMessages id="sidebar.renter" />
-                    </span>
+                    <span className="nav-text">{this.props.t('sidebar.cusman')} </span>
                   </span>
                 </Link>
               </Menu.Item>
@@ -105,9 +107,7 @@ class Sidebar extends Component {
                 <Link to={'/xe-may'}>
                   <span className="isoMenuHolder" style={submenuColor}>
                     <i className="anticon anticon-star" />
-                    <span className="nav-text">
-                      <IntlMessages id="sidebar.motorbike" />
-                    </span>
+                    <span className="nav-text">{this.props.t('sidebar.motor')}</span>
                   </span>
                 </Link>
               </Menu.Item>
@@ -115,9 +115,7 @@ class Sidebar extends Component {
                 <Link to={'/don-dat-hang'}>
                   <span className="isoMenuHolder" style={submenuColor}>
                     <i className="anticon anticon-solution" />
-                    <span className="nav-text">
-                      <IntlMessages id="sidebar.order" />
-                    </span>
+                    <span className="nav-text">{this.props.t('sidebar.order')}</span>
                   </span>
                 </Link>
               </Menu.Item>
@@ -125,9 +123,7 @@ class Sidebar extends Component {
                 <Link to={'/thanh-toan'}>
                   <span className="isoMenuHolder" style={submenuColor}>
                     <i className="anticon anticon-credit-card" />
-                    <span className="nav-text">
-                      <IntlMessages id="sidebar.payment" />
-                    </span>
+                    <span className="nav-text">{this.props.t('sidebar.payment')}</span>
                   </span>
                 </Link>
               </Menu.Item>
@@ -161,6 +157,7 @@ class Sidebar extends Component {
 
 Sidebar.propTypes = {
   app: PropTypes.object,
+  t: PropTypes.func.isRequired,
 };
 
 export default connect(
@@ -168,4 +165,4 @@ export default connect(
     app: state.App,
   }),
   null,
-)(Sidebar);
+)(translate(Sidebar));

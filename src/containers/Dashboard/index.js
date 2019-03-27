@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
+import { setTranslations, translate } from 'react-switch-lang';
 import { Table, Row, Col, Tag, Popconfirm, Calendar, Button } from 'antd';
 import moment from 'moment';
 import PageHeader from '../../components/utility/PageHeader';
@@ -21,11 +23,14 @@ import {
   fetchListOrderThunk,
   updateCheckOrderThunk,
 } from '../../redux/dashboard/thunks';
+import en from '../../languageProvider/locales/en_US.json';
+import th from '../../languageProvider/locales/vi_VN.json';
 import { addListPaymentThunk, updateStatusThunk } from '../../redux/order/thunks';
 
 import HomeWrapper from './style';
 import Card from './Card/index';
-import _ from 'lodash';
+
+setTranslations({ en, th });
 
 class Home extends Component {
   constructor(props) {
@@ -35,7 +40,7 @@ class Home extends Component {
     };
     this.columnsPaymentRight = [
       {
-        title: 'Người đặt',
+        title: this.props.t('home.renter'),
         dataIndex: 'user_id',
         key: 'user_id',
         width: '10%',
@@ -49,13 +54,13 @@ class Home extends Component {
         },
       },
       {
-        title: 'Đơn hàng',
+        title: this.props.t('home.order'),
         dataIndex: 'motor_id.name',
         key: 'motor_id.name',
         width: '10%',
       },
       {
-        title: 'Ngày đặt',
+        title: this.props.t('home.orderdate'),
         dataIndex: 'createdAt',
         key: 'createdAt',
         width: '10%',
@@ -64,7 +69,7 @@ class Home extends Component {
         },
       },
       {
-        title: 'Ngày trả',
+        title: this.props.t('home.paydate'),
         dataIndex: 'createdAt',
         key: 'createdAt',
         width: '10%',
@@ -76,7 +81,7 @@ class Home extends Component {
         },
       },
       {
-        title: 'Số ngày quá hạn',
+        title: this.props.t('home.expireday'),
         key: 'nowDate',
         width: '10%',
 
@@ -92,7 +97,7 @@ class Home extends Component {
         },
       },
       {
-        title: 'Hành động',
+        title: this.props.t('home.action'),
         className: 'column-center',
         key: 'action',
         width: '10%',
@@ -100,10 +105,10 @@ class Home extends Component {
           <div>
             <span>
               <Popconfirm
-                title="Bạn có chắc chắn không?"
+                title={this.props.t('home.sure')}
                 onConfirm={() => this.handleAdd(record)}
-                okText="Đồng ý"
-                cancelText="Trả xe"
+                okText={this.props.t('home.ok')}
+                cancelText={this.props.t('home.returnmotor')}
               >
                 <Button
                   className="btn"
@@ -111,7 +116,7 @@ class Home extends Component {
                   disabled={record.is_cancel || record.is_finished}
                   type="primary"
                 >
-                  Trả xe
+                  {this.props.t('home.returnmotor')}
                 </Button>
               </Popconfirm>
             </span>
@@ -121,7 +126,7 @@ class Home extends Component {
     ];
     this.columnsPaymentLeft = [
       {
-        title: 'Người đặt',
+        title: this.props.t('home.renter'),
         dataIndex: 'user_id',
         key: 'user_id',
         width: '10%',
@@ -135,13 +140,13 @@ class Home extends Component {
         },
       },
       {
-        title: 'Đơn hàng',
+        title: this.props.t('home.order'),
         dataIndex: 'motor_id.name',
         key: 'motor_id.name',
         width: '10%',
       },
       {
-        title: 'Ngày đặt',
+        title: this.props.t('home.orderdate'),
         dataIndex: 'createdAt',
         key: 'createdAt',
         width: '10%',
@@ -150,7 +155,7 @@ class Home extends Component {
         },
       },
       {
-        title: 'Thời gian nhận xe',
+        title: this.props.t('home.getmotortime'),
         dataIndex: 'createdAt',
         key: 'createdAt',
         width: '8%',
@@ -162,7 +167,7 @@ class Home extends Component {
         },
       },
       {
-        title: 'Số giờ quá hạn',
+        title: this.props.t('home.expirehour'),
         key: 'nowDate',
         width: '9%',
 
@@ -174,7 +179,7 @@ class Home extends Component {
         },
       },
       {
-        title: 'Hành động',
+        title: this.props.t('home.action'),
         className: 'column-center',
         key: 'action',
         width: '10%',
@@ -182,25 +187,25 @@ class Home extends Component {
           <div>
             <span>
               <Popconfirm
-                title="Bạn có chắc muốn chuyển đơn hàng về trạng thái bình thường không?"
+                title={this.props.t('home.suretokeeporder')}
                 onConfirm={() => this.updateCheck(record)}
-                okText="Đồng ý"
-                cancelText="Hủy"
+                okText={this.props.t('home.ok')}
+                cancelText={this.props.t('home.cancelorder')}
               >
                 <Button className="btn" style={{ width: 65 }} type="primary">
-                  Giữ lại
+                  {this.props.t('home.keeporder')}
                 </Button>
               </Popconfirm>
             </span>
             <span>
               <Popconfirm
-                title="Bạn chắc chắn muốn hủy đơn hàng?"
+                title={this.props.t('home.suretocancelorder')}
                 onConfirm={() => this.handleUpdate(record)}
-                okText="Đồng ý"
-                cancelText="Hủy bỏ"
+                okText={this.props.t('home.ok')}
+                cancelText={this.props.t('home.cancelorder')}
               >
                 <Button className="btn" style={{ width: 65 }} type="danger">
-                  Hủy
+                  {this.props.t('home.cancelorder')}
                 </Button>
               </Popconfirm>
             </span>
@@ -221,8 +226,10 @@ class Home extends Component {
       this.props.fetchRightOrder(nextProps.shop_id);
       this.props.countPayments(nextProps.shop_id, newdueDate.toISOString(), moment().toISOString());
       this.props.fetchListOrder(nextProps.shop_id);
+      this.props.countRenters(nextProps.shop_id);
     }
   }
+
   handleUpdate = data => {
     const newValues = {
       motor_id: {
@@ -387,16 +394,15 @@ class Home extends Component {
       console.log(timeDate3, 'ok ok ok ok');
       if (timeDate3 > 0 && timeToday) newHour.push(order);
     });
+    const month = moment().month() + 1;
     return (
       <HomeWrapper>
         <LayoutWrapper>
-          <PageHeader>
-            <IntlMessages id="sidebar.dashboard" />
-          </PageHeader>
+          <PageHeader>{this.props.t('home.dashboard')}</PageHeader>
           <div className="isoLayoutContent space">
             <Row type="flex" justify="space-between">
               <Card
-                title={'Tổng khách hàng'}
+                title={this.props.t('home.totalcus')}
                 countNumber={result.length}
                 linkRoute={'/khach-hang'}
                 typeIcon={'usergroup-add'}
@@ -406,7 +412,7 @@ class Home extends Component {
                 styleLink={{ color: 'white' }}
               />
               <Card
-                title={'Số lượng đặt hàng'}
+                title={this.props.t('home.totalorder')}
                 countNumber={this.props.NoMotor}
                 linkRoute={'/thanh-toan'}
                 typeIcon={'check-circle'}
@@ -416,7 +422,7 @@ class Home extends Component {
                 styleLink={{ color: 'white' }}
               />
               <Card
-                title={'Số xe có sẵn'}
+                title={this.props.t('home.availmotor')}
                 countNumber={`${this.props.TotalMotors}/${this.props.listMotor}`}
                 linkRoute={'/xe-may'}
                 typeIcon={'bell'}
@@ -426,7 +432,7 @@ class Home extends Component {
                 styleLink={{ color: 'white' }}
               />
               <Card
-                title={`Tổng thu tháng ${moment().month() + 1}`}
+                title={this.props.t('home.totalrevenue') + month}
                 countNumber={this.formatCurrency(sum)}
                 linkRoute={'/thanh-toan'}
                 typeIcon={'wallet'}
@@ -439,10 +445,10 @@ class Home extends Component {
           </div>
           <div className="isoLayoutContent space">
             <Row type="flex" justify="space-between">
-              <Col className="double-table" span={10}>
+              <Col className="double-table" span={5}>
                 <div className="isoLayoutContent">
                   <p className="title">
-                    <b>Danh sách các đơn hàng quá hạn thanh toán</b>
+                    <b>{this.props.t('home.lefttable')}</b>
                   </p>
                   <Table
                     dataSource={newDate}
@@ -451,16 +457,16 @@ class Home extends Component {
                   />
                 </div>
               </Col>
-              <Col className="double-table" span={10}>
+              <Col className="double-table" span={5}>
                 <div className="isoLayoutContent">
                   <p className="title">
-                    <b>Danh sách các đơn hàng quá hạn nhận xe</b>
+                    <b>{this.props.t('home.righttable')}</b>
                   </p>
                   <Table dataSource={newHour} columns={this.columnsPaymentLeft} />
                 </div>
               </Col>
               {/* <Col className="double-table" span={5}> */}
-              <div style={{ width: 300, border: '1px solid #d9d9d9', borderRadius: 4 }}>
+              <div className="calendar" style={{ border: '1px solid #d9d9d9', borderRadius: 4, marginTop: 10, marginLeft: 285 }}>
                 <Calendar fullscreen={false} onPanelChange={onPanelChange} />
               </div>
               {/* </Col> */}
@@ -498,6 +504,7 @@ Home.propTypes = {
   addListPayment: PropTypes.func,
   updateStatus: PropTypes.func,
   updateCheckOrder: PropTypes.func,
+  t: PropTypes.func.isRequired,
 };
 
 export default connect(
@@ -562,4 +569,4 @@ export default connect(
       },
     };
   },
-)(Home);
+)(translate(Home));

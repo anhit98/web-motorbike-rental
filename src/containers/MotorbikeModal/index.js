@@ -4,10 +4,14 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import { Form, Input, Upload, Icon, Modal, InputNumber, Row, Col, Select } from 'antd';
+import { setTranslations, translate } from 'react-switch-lang';
 import ModalComponent from './../common/ModalComponent/index';
 import MotorbikeModalStyle from './style';
 import { fetchListMotorTypesThunk } from '../../redux/motorbiketype/thunks';
+import en from '../../languageProvider/locales/en_US.json';
+import th from '../../languageProvider/locales/vi_VN.json';
 
+setTranslations({ en, th });
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -22,6 +26,7 @@ function handleBlur() {
 function handleFocus() {
   console.log('focus');
 }
+
 class MotorbikeModal extends Component {
   constructor(props) {
     super(props);
@@ -58,7 +63,7 @@ class MotorbikeModal extends Component {
     const uploadButton = (
       <div>
         <Icon type="plus" />
-        <div className="ant-upload-text">Upload</div>
+        <div className="ant-upload-text">{this.props.t('motor.upload')}</div>
       </div>
     );
     const { form, title, text, onCreate, name } = this.props;
@@ -74,12 +79,12 @@ class MotorbikeModal extends Component {
         <Form layout="vertical">
           <Row gutter={12}>
             <Col span={12}>
-              <FormItem label="Tên xe">
+              <FormItem label={this.props.t('motor.name')}>
                 {getFieldDecorator('name', {
                   rules: [
                     {
                       required: true,
-                      message: 'Vui lòng nhập trường này!',
+                      message: this.props.t('motor.fillRequire'),
                       len: '1',
                       min: '0',
                     },
@@ -90,12 +95,12 @@ class MotorbikeModal extends Component {
             </Col>
 
             <Col span={12}>
-              <FormItem label="Biển số xe">
+              <FormItem label={this.props.t('motor.licence')}>
                 {getFieldDecorator('license_plate', {
                   rules: [
                     {
                       required: true,
-                      message: 'Vui lòng nhập trường này!',
+                      message: this.props.t('motor.fillRequire'),
                       len: '1',
                       min: '0',
                     },
@@ -106,12 +111,12 @@ class MotorbikeModal extends Component {
             </Col>
 
             <Col span={12}>
-              <FormItem label="Loại xe">
+              <FormItem label={this.props.t('motor.type')}>
                 {getFieldDecorator('motorbikeType_id', {
                   rules: [
                     {
                       required: true,
-                      message: 'Vui lòng nhập trường này!',
+                      message: this.props.t('motor.fillRequire'),
                       len: '1',
                       min: '0',
                     },
@@ -125,7 +130,7 @@ class MotorbikeModal extends Component {
                   <Select
                     showSearch
                     style={{ width: 238 }}
-                    placeholder="Chọn loại xe"
+                    placeholder={this.props.t('motor.type')}
                     optionFilterProp="children"
                     onChange={handleChange}
                     onFocus={handleFocus}
@@ -153,9 +158,9 @@ class MotorbikeModal extends Component {
             </Col>
             <Col span={12}>
               <MotorbikeModalStyle>
-                <FormItem label="Giá">
+                <FormItem label={this.props.t('motor.price')}>
                   {getFieldDecorator('rent_price', {
-                    rules: [{ required: true, message: 'Vui lòng nhập trường này!' }],
+                    rules: [{ required: true, message: this.props.t('motor.fillRequire') }],
                     initialValue: this.props.data && this.props.data.rent_price,
                   })(
                     <InputNumber
@@ -170,7 +175,7 @@ class MotorbikeModal extends Component {
           </Row>
           <Row gutter={12}>
             <Col span={24}>
-              <FormItem label="Hình ảnh">
+              <FormItem label={this.props.t('motor.image')}>
                 {getFieldDecorator(
                   'images',
                   _.isEmpty(this.state.fileList)
@@ -178,7 +183,7 @@ class MotorbikeModal extends Component {
                         rules: [
                           {
                             required: true,
-                            message: 'Vui lòng nhập trường này!',
+                            message: this.props.t('motor.fillRequire'),
                             len: '1',
                             min: '0',
                           },
@@ -206,7 +211,7 @@ class MotorbikeModal extends Component {
           </Row>
           <Row>
             <Col span={24}>
-              <FormItem label="Mô tả chi tiết">
+              <FormItem label={this.props.t('motor.description')}>
                 {getFieldDecorator('description', {
                   initialValue: this.props.data && this.props.data.description,
                 })(<Input type="textarea" />)}
@@ -228,6 +233,7 @@ MotorbikeModal.propTypes = {
   title: PropTypes.string,
   text: PropTypes.string,
   listMotor: PropTypes.array,
+  t: PropTypes.func.isRequired,
 };
 
 const createForm = Form.create()(MotorbikeModal);
@@ -245,4 +251,4 @@ export default connect(
       },
     };
   },
-)(createForm);
+)(translate(createForm));

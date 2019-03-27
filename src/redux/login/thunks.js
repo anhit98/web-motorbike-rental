@@ -21,6 +21,7 @@ export const getCurrentUserThunk = () => {
     console.log('thunkanhhhhhh');
     apiWrapper(dispatch, get('/users/me'), false)
       .then(data => {
+        console.log(data, 'session');
         dispatch(login(data));
       })
       .catch(err => {

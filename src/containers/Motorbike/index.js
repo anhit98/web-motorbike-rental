@@ -3,11 +3,15 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import Fuse from 'fuse.js';
+import { setTranslations, translate } from 'react-switch-lang';
 import moment from 'moment';
 import { Table, Button, Icon, Popconfirm, Input, Tag } from 'antd';
 import PageHeader from '../../components/utility/PageHeader';
 import LayoutWrapper from '../../components/utility/LayoutWrapper';
-import IntlMessages from '../../components/utility/intlMessages';
+
+import en from '../../languageProvider/locales/en_US.json';
+import th from '../../languageProvider/locales/vi_VN.json';
+
 import {
   fetchListMotorbikeThunk,
   addListMotorbikeThunk,
@@ -20,6 +24,7 @@ import { toggleModal } from './../../redux/modals/actions';
 // import { fetchListMotorTypesThunk } from '../../redux/motorbiketype/thunks';
 const Search = Input.Search;
 
+setTranslations({ en, th });
 export function formatCurrency(value) {
   if (value) {
     const money = value
@@ -49,7 +54,7 @@ class Motorbike extends Component {
         width: '10%',
       },
       {
-        title: 'Tên xe',
+        title: this.props.t('motor.name'),
         dataIndex: 'name',
         className: 'column-center',
         key: 'name',
@@ -58,7 +63,7 @@ class Motorbike extends Component {
       },
 
       {
-        title: 'Loại xe',
+        title: this.props.t('motor.type'),
         dataIndex: 'motorbikeType_id',
         className: 'column-center',
         key: 'motorbikeType_id',
@@ -68,14 +73,14 @@ class Motorbike extends Component {
         },
       },
       {
-        title: 'Biển số xe',
+        title: this.props.t('motor.licence'),
         dataIndex: 'license_plate',
         className: 'column-center',
         key: 'license_plate',
         width: '10%',
       },
       {
-        title: 'Giá',
+        title: this.props.t('motor.price'),
         dataIndex: 'rent_price',
         className: 'column-center',
         key: 'rent_price',
@@ -84,27 +89,27 @@ class Motorbike extends Component {
         render: value => formatCurrency(value),
       },
       {
-        title: 'Mô tả',
+        title: this.props.t('motor.description'),
         dataIndex: 'description',
         className: 'column-center',
         key: 'description',
         width: '16%',
       },
       {
-        title: 'Trạng thái',
+        title: this.props.t('motor.status'),
         dataIndex: 'is_available',
         className: 'column-center',
         key: 'is_available',
         width: '10%',
         render: value => {
           if (value === true) {
-            return <Tag color="#f50">Có sẵn</Tag>;
+            return <Tag color="#f50">{this.props.t('motor.avail')}</Tag>;
           }
-          return <Tag color="#2db7f5">Không có sẵn</Tag>;
+          return <Tag color="#2db7f5">{this.props.t('motor.noAvail')}</Tag>;
         },
       },
       {
-        title: 'Ngày tạo',
+        title: this.props.t('motor.createdDate'),
         dataIndex: 'createdAt',
         className: 'column-center',
         key: 'createdAt',
@@ -114,7 +119,7 @@ class Motorbike extends Component {
         },
       },
       {
-        title: 'Hành động',
+        title: this.props.t('motor.action'),
         className: 'column-center',
         key: 'action',
         width: '10%',
@@ -125,7 +130,7 @@ class Motorbike extends Component {
                 style={{ width: 45 }}
                 className="iconEdit"
                 type="edit"
-                title="Chỉnh sửa"
+                title={this.props.t('motor.editMotor')}
                 onClick={() => {
                   this.showModalEdit(record);
                 }}
@@ -134,12 +139,12 @@ class Motorbike extends Component {
 
             <span>
               <Popconfirm
-                title="Bạn chắc chắn muốn xóa?"
+                title={this.props.t('motor.suretodel')}
                 onConfirm={() => this.handleDelete(record)}
-                okText="Đồng ý"
-                cancelText="Hủy bỏ"
+                okText={this.props.t('motor.agree')}
+                cancelText={this.props.t('motor.cancel')}
               >
-                <Icon className="iconDel" type="delete" title="Xóa" />
+                <Icon className="iconDel" type="delete" title={this.props.t('motor.delMotor')} />
               </Popconfirm>
             </span>
           </div>
@@ -377,20 +382,18 @@ class Motorbike extends Component {
     return (
       <MotorbikeStyle>
         <LayoutWrapper>
-          <PageHeader>
-            <IntlMessages id="sidebar.motorbike" />
-          </PageHeader>
+          <PageHeader>{this.props.t('motor.title')}</PageHeader>
           <div className="header">
             <div className="filter">
               <Search
-                placeholder="Nhập từ khóa của bạn..."
+                placeholder={this.props.t('motor.search')}
                 onSearch={this.onSearching}
                 style={{ width: 200 }}
               />
             </div>
             <div className="button-group">
-              <Button type="primary" style={{ marginLeft: 100 }} onClick={this.showModalAdd}>
-                Thêm xe mới
+              <Button type="primary" onClick={this.showModalAdd}>
+                {this.props.t('motor.add')}
               </Button>
               {this.props.addMotorbikeModal && (
                 <MotorbikeModal
@@ -409,7 +412,7 @@ class Motorbike extends Component {
                   name="editMotorbikeModal"
                   getPropsFromChild={this.getPropsFromChild}
                   text="Edit"
-                  title="Chỉnh sửa xe"
+                  title={this.props.t('motor.editMotor')}
                   saveFormRef={this.saveFormRef}
                   onCreate={this.handleEdit}
                   data={this.state.rowData}
@@ -437,6 +440,7 @@ Motorbike.propTypes = {
   addMotorbikeModal: PropTypes.bool,
   editMotorbikeModal: PropTypes.bool,
   shop_id: PropTypes.string,
+  t: PropTypes.func.isRequired,
 };
 
 export default connect(
@@ -469,4 +473,4 @@ export default connect(
       toggleModal: (name, status) => dispatch(toggleModal(name, status)),
     };
   },
-)(Motorbike);
+)(translate(Motorbike));
