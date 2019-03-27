@@ -166,5 +166,21 @@
     "total": "Total",
     "shippingamount": "Shipping Amount",
     "returndate": "Return date"
+  },
+  "login": {
+    "formtitle": "Login",
+    "vn": "Vietnamese",
+    "en": "English",
+    "username": "Please enter your name",
+    "password": "Please enter your password",
+    "name": "Username",
+    "pass": "Password"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "cusman": "Customer Management",
+    "motor": "Motorbike Management",
+    "order": "Order Management",
+    "payment": "Payment History"
   }
 }

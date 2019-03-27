@@ -111,6 +111,7 @@ class SignIn extends Component {
               >
                 <Option value="Vietnamese">
                   <Flag code="vn" height="14" style={{ marginRight: 3, marginTop: 4 }} />
+
                   <span>Vietnamese</span>
                 </Option>
                 <Option value="English">
@@ -120,19 +121,19 @@ class SignIn extends Component {
               </Select>
               <div className="isoLoginContent">
                 <div className="isoLogoWrapper">
-                  <Link to="/dashboard">Đăng nhập</Link>
+                  <Link to="/dashboard">{this.props.t('login.formtitle')}</Link>
                 </div>
 
                 <div className="isoSignInForm">
                   <div className="isoInputWrapper">
                     <FormItem>
                       {getFieldDecorator('username', {
-                        rules: [{ required: true, message: 'Please enter your username!' }],
+                        rules: [{ required: true, message: this.props.t('login.username') }],
                       })(
                         <Input
                           size="large"
                           name="username"
-                          placeholder="Username"
+                          placeholder={this.props.t('login.name')}
                           setfieldsvalue={this.state.username}
                           onChange={this.handleUserNameChange}
                           required
@@ -144,12 +145,12 @@ class SignIn extends Component {
                   <div className="isoInputWrapper">
                     <FormItem>
                       {getFieldDecorator('password', {
-                        rules: [{ required: true, message: 'Please enter your password!' }],
+                        rules: [{ required: true, message: this.props.t('login.password') }],
                       })(
                         <Input
                           size="large"
                           type="password"
-                          placeholder="Password"
+                          placeholder={this.props.t('login.pass')}
                           setfieldsvalue={this.state.password}
                           onChange={this.handlePasswordChange}
                           required

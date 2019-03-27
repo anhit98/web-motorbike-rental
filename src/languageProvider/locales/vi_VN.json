@@ -169,5 +169,22 @@
     "total": "Tổng tiền",
     "shippingamount": "Phí vận chuyển",
     "returndate": "Ngày trả xe"
+  },
+  "login": {
+    "formtitle": "Đăng nhập",
+    "vn": "Việt Nam",
+    "en": "Tiếng Anh",
+    "username": "Vui lòng nhập tên của bạn",
+    "password": "Vui lòng nhập mật khẩu",
+    "name": "Tên",
+    "pass": "Mật khẩu"
+  },
+
+  "sidebar": {
+    "dashboard": "Trang chủ",
+    "cusman": "Quản lí khách hàng",
+    "motor": "Quản lí xe máy",
+    "order": "Quản lí đơn hàng",
+    "payment": "Lịch sử thanh toán"
   }
 }
