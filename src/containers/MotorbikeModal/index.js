@@ -135,8 +135,11 @@ class MotorbikeModal extends Component {
                     onChange={handleChange}
                     onFocus={handleFocus}
                     onBlur={handleBlur}
+                    id="motorbikeType_id"
+
                     filterOption={(input, option) =>
                       option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+
                     }
                   >
                     {this.props.listMotor.map(motortype => (
