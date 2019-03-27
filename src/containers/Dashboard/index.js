@@ -48,7 +48,7 @@ class Home extends Component {
           return (
             <span>
               {record.user_id.username}
-              <br /> SĐT:{record.user_id.phoneNumber}
+              <br /> SĐT:{record.phone_number}
             </span>
           );
         },
@@ -127,14 +127,14 @@ class Home extends Component {
     this.columnsPaymentLeft = [
       {
         title: this.props.t('home.renter'),
-        dataIndex: 'user_id',
-        key: 'user_id',
-        width: '10%',
+        dataIndex: 'phone_number',
+        key: 'phone_number',
+        width: '14%',
         render: (value, record) => {
           return (
             <span>
               {record.user_id.username}
-              <br /> SĐT:{record.user_id.phoneNumber}
+              <br /> SĐT:{record.phone_number}
             </span>
           );
         },
@@ -151,19 +151,19 @@ class Home extends Component {
         key: 'createdAt',
         width: '10%',
         render: value => {
-          return moment(value).format('hh:mm:ss-DD-MM-YYYY');
+          return moment(value).format('hh:mm-DD-MM-YYYY');
         },
       },
       {
         title: this.props.t('home.getmotortime'),
         dataIndex: 'createdAt',
         key: 'createdAt',
-        width: '8%',
+        width: '10%',
         render: (record, value) => {
           // console.log(record, value.total_days_rented, "tong ngay 123");
           return moment(value.createdAt)
             .add(3, 'hour')
-            .format('hh:mm:ss-DD-MM-YYYY');
+            .format('hh:mm-DD-MM-YYYY');
         },
       },
       {
@@ -376,15 +376,25 @@ class Home extends Component {
       console.log(value, mode);
     }
     const newDate = [];
-    console.log(newDate, 'gfjdgf1222222');
+  
     _.forEach(this.props.listLeftOrder, order => {
+      console.log(order, 'ok ok');
       const timeDate2 = moment().diff(
         moment(order.createdAt).add(order.total_days_rented, 'days'),
         'days',
       );
-      console.log(timeDate2, 'ok ok ok ok');
-      if (timeDate2 > 0) newDate.push(order);
+      console.log(moment(order.createdAt), 'au');
+      // console.log(timeDate2, 'au');
+      if (timeDate2 > 0) 
+      {
+        console.log(newDate,timeDate2, 'vfnjf');
+      newDate.push(order);
+    
+
+    }
+
     });
+    
     const newHour = [];
     console.log(newHour, 'gfjdgf1222222hour');
     _.forEach(this.props.listRightOrder, order => {

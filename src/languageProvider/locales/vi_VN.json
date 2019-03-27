@@ -147,7 +147,7 @@
     "returndate": "Ngày trả xe",
     "status": "Trạng thái",
     "action": "Hành động",
-    "normalStatus": "Bình thường",
+    "normalStatus": "Đơn hàng đã hoàn thành",
     "cancelStatus": "Đơn hàng đã bị hủy",
     "returnmotor": "Trả xe",
     "cancelorder": "Hủy",

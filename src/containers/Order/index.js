@@ -50,12 +50,12 @@ class Order extends Component {
       },
       {
         title: this.props.t('order.phone'),
-        dataIndex: 'user_id',
+        dataIndex: 'phone_number',
         className: 'column-center',
-        key: 'user_id',
+        key: 'phone_number',
         width: '10%',
         render: (value, record) => {
-          return <p>{record.user_id.phoneNumber}</p>;
+          return <p>{record.phone_number}</p>;
         },
       },
 
@@ -282,6 +282,7 @@ class Order extends Component {
         className: 'shop',
         objectId: data.shop_id.objectId,
       },
+      total: data.total_price,
     };
     const newStatus = {
       motor_id: {
