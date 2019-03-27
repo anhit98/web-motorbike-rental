@@ -99,7 +99,10 @@ const HomeWrapper = styled.div`
     color: red;
   }
   .double-table {
-    width: 39.35%;
+    width: 50%;
+  }
+  .calendar{
+    width: 60%;
   }
   .renter p {
     font-size: 12px;

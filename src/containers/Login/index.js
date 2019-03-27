@@ -93,20 +93,6 @@ class SignIn extends Component {
     return (
       <div>
         <SignInStyleWrapper className="isoSignInPage">
-          <Select
-            defaultValue={getLanguage() === 'en' ? 'English' : 'Vietnamese'}
-            style={{ width: 120 }}
-            onChange={this.handleChange}
-          >
-            <Option value="Vietnamese">
-              <Flag code="vn" height="14" style={{ marginRight: 3, marginTop: 4 }} />
-              <span>Vietnamese</span>
-            </Option>
-            <Option value="English">
-              <Flag code="us" height="13" style={{ marginRight: 3, width: 20, marginTop: 3 }} />
-              <span>English</span>
-            </Option>
-          </Select>
           <div className="titleWrapper">
             <Link className="titleStyle" to="/dashboard">
               Motorbike
@@ -118,6 +104,20 @@ class SignIn extends Component {
 
           <Form className="loginForm" onSubmit={this.handleLogin}>
             <div className="isoLoginContentWrapper">
+              <Select
+                defaultValue={getLanguage() === 'en' ? 'English' : 'Vietnamese'}
+                style={{ width: 120, marginLeft: 313, marginTop: 14 }}
+                onChange={this.handleChange}
+              >
+                <Option value="Vietnamese">
+                  <Flag code="vn" height="14" style={{ marginRight: 3, marginTop: 4 }} />
+                  <span>Vietnamese</span>
+                </Option>
+                <Option value="English">
+                  <Flag code="us" height="13" style={{ marginRight: 3, width: 20, marginTop: 3 }} />
+                  <span>English</span>
+                </Option>
+              </Select>
               <div className="isoLoginContent">
                 <div className="isoLogoWrapper">
                   <Link to="/dashboard">Đăng nhập</Link>
