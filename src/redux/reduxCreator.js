@@ -28,7 +28,7 @@ export const apiWrapper = (dispatch, apiFunc, isShowSuccessNoti = true, ms = 100
   const timeout = new Promise((resolve, reject) => {
     const id = setTimeout(() => {
       clearTimeout(id);
-      // reject({ message: 'Quá thời gian chờ. Vui lòng thử lại!!!!' });
+      reject({ message: 'Quá thời gian chờ. Vui lòng thử lại!!!!' });
     }, ms);
   });
 
@@ -46,32 +46,31 @@ export const apiWrapper = (dispatch, apiFunc, isShowSuccessNoti = true, ms = 100
   return Promise.race([timeout, promise])
     .then(res => {
       dispatch(changeMainLoadingStatus(false));
-      // if (isShowSuccessNoti) {
-      //   dispatch(
-      //     success({
-      //       title: 'Xong',
-      //       message: 'Thành công!',
-      //       autoDismiss: 3,
-      //     }),
-      //   );
-      // }
+      if (isShowSuccessNoti) {
+        dispatch(
+          success({
+            title: 'Xong',
+            message: 'Thành công!',
+            autoDismiss: 3,
+          }),
+        );
+      }
       return res;
     })
     .catch(err => {
       dispatch(changeMainLoadingStatus(false));
       console.log(err, 'fdsfcds');
-      // if (err.message !== 'Invalid session token') {
-      //   dispatch(
-      //     error({
-      //       // uid: 'once-please', // you can specify your own uid if required
-      //       title: 'Error',
-      //       message:
-      //         err && err.message ? err.message : 'Lỗi server! Thử lại sau !!!!',
-      //       position: 'tr',
-      //       autoDismiss: 3,
-      //     }),
-      //   );
-      // }
+      if (err.message !== 'Invalid session token') {
+        dispatch(
+          error({
+            // uid: 'once-please', // you can specify your own uid if required
+            title: 'Error',
+            message: err && err.message ? err.message : 'Lỗi server! Thử lại sau !!!!',
+            position: 'tr',
+            autoDismiss: 3,
+          }),
+        );
+      }
       throw err;
     });
 };
