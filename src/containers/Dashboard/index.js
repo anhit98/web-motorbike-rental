@@ -98,7 +98,7 @@ class Home extends Component {
         title: this.props.t('home.action'),
         className: 'column-center',
         key: 'action',
-        width: '10%',
+        width: '8%',
         render: (value, record) => (
           <div>
             <span>
@@ -180,7 +180,7 @@ class Home extends Component {
         title: this.props.t('home.action'),
         className: 'column-center',
         key: 'action',
-        width: '10%',
+        width: '8%',
         render: (value, record) => (
           <div>
             <span>

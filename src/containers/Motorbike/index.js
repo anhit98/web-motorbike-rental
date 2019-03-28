@@ -47,13 +47,6 @@ class Motorbike extends Component {
     };
     this.columns = [
       {
-        title: 'ID',
-        dataIndex: 'objectId',
-        className: 'column-center',
-        key: 'objectId',
-        width: '10%',
-      },
-      {
         title: this.props.t('motor.name'),
         dataIndex: 'name',
         className: 'column-center',
