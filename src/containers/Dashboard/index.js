@@ -41,7 +41,7 @@ class Home extends Component {
         title: this.props.t('home.renter'),
         dataIndex: 'user_id',
         key: 'user_id',
-        width: '10%',
+        width: '14%',
         render: (value, record) => {
           return (
             <span>
