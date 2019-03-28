@@ -3,18 +3,16 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { setTranslations, translate } from 'react-switch-lang';
-import { Table, Row, Col, Tag, Popconfirm, Calendar, Button } from 'antd';
+import { Table, Row, Col, Popconfirm, Calendar, Button } from 'antd';
 import moment from 'moment';
 import PageHeader from '../../components/utility/PageHeader';
 import LayoutWrapper from '../../components/utility/LayoutWrapper';
-import IntlMessages from '../../components/utility/intlMessages';
 import {
   fetchCountRentersThunk,
   fetchCountMotorThunk,
   fetchCountTotalMotorsThunk,
   fetchCountPaymentsThunk,
   fetchListRentersThunk,
-  fetchListMotorbikeThunk,
   fetchLeftOrderThunk,
   fetchRightOrderThunk,
   updateListMotorbikeThunk,
@@ -376,7 +374,6 @@ class Home extends Component {
       console.log(value, mode);
     }
     const newDate = [];
-  
     _.forEach(this.props.listLeftOrder, order => {
       console.log(order, 'ok ok');
       const timeDate2 = moment().diff(
@@ -385,16 +382,11 @@ class Home extends Component {
       );
       console.log(moment(order.createdAt), 'au');
       // console.log(timeDate2, 'au');
-      if (timeDate2 > 0) 
-      {
-        console.log(newDate,timeDate2, 'vfnjf');
-      newDate.push(order);
-    
-
-    }
-
+      if (timeDate2 > 0) {
+        console.log(newDate, timeDate2, 'vfnjf');
+        newDate.push(order);
+      }
     });
-    
     const newHour = [];
     console.log(newHour, 'gfjdgf1222222hour');
     _.forEach(this.props.listRightOrder, order => {
@@ -476,7 +468,15 @@ class Home extends Component {
                 </div>
               </Col>
               {/* <Col className="double-table" span={5}> */}
-              <div className="calendar" style={{ border: '1px solid #d9d9d9', borderRadius: 4, marginTop: 10, marginLeft: 285 }}>
+              <div
+                className="calendar"
+                style={{
+                  border: '1px solid #d9d9d9',
+                  borderRadius: 4,
+                  marginTop: 10,
+                  marginLeft: 285,
+                }}
+              >
                 <Calendar fullscreen={false} onPanelChange={onPanelChange} />
               </div>
               {/* </Col> */}
@@ -490,7 +490,6 @@ class Home extends Component {
 
 Home.propTypes = {
   countRenters: PropTypes.func,
-  NoRenters: PropTypes.number,
   countMotor: PropTypes.func,
   NoMotor: PropTypes.number,
   countTotalMotors: PropTypes.func,
@@ -500,8 +499,6 @@ Home.propTypes = {
   fetchListMotorbike: PropTypes.func,
   fetchListRenters: PropTypes.func,
   listRenters: PropTypes.array,
-  fetchListPayments: PropTypes.func,
-  listPayments: PropTypes.array,
   listMotor: PropTypes.number,
   shop_id: PropTypes.string,
   updateListMotor: PropTypes.func,

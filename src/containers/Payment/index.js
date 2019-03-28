@@ -13,6 +13,7 @@ import { toggleModal } from './../../redux/modals/actions';
 import en from '../../languageProvider/locales/en_US.json';
 import th from '../../languageProvider/locales/vi_VN.json';
 import _ from 'lodash';
+
 setTranslations({ en, th });
 
 export function formatCurrency(value) {
@@ -46,12 +47,12 @@ class Payment extends Component {
       },
       {
         title: this.props.t('payment.phone'),
-        dataIndex: 'user',
+        dataIndex: 'phone_number',
         className: 'column-center',
-        key: 'user',
+        key: 'phone_number',
         width: '12%',
         render: (value, record) => {
-          return <p>{record.user.phoneNumber}</p>;
+          return <p>{record.phone_number}</p>;
         },
       },
 
@@ -136,9 +137,7 @@ class Payment extends Component {
     return (
       <PaymentStyle>
         <LayoutWrapper>
-          <PageHeader>
-            {this.props.t('payment.title')}
-          </PageHeader>
+          <PageHeader>{this.props.t('payment.title')}</PageHeader>
           <div className="isoLayoutContent">
             <Table
               dataSource={
@@ -159,7 +158,7 @@ Payment.propTypes = {
   fetchListPayment: PropTypes.func,
   shop_id: PropTypes.string,
   listPayment: PropTypes.array,
-  t: PropTypes.func.isRequired
+  t: PropTypes.func.isRequired,
 };
 
 export default connect(

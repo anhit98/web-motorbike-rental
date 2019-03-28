@@ -233,6 +233,7 @@ class Order extends Component {
       },
       is_shipping: data.is_shipping,
       is_cancel: true,
+      phone_number: data.phone_number,
       total_days_rented: data.total_days_rented,
       is_finished: true,
       total_price: data.total_price,
@@ -283,6 +284,7 @@ class Order extends Component {
         objectId: data.shop_id.objectId,
       },
       total: data.total_price,
+      phone_number: data.phone_number,
     };
     const newStatus = {
       motor_id: {
@@ -300,6 +302,7 @@ class Order extends Component {
       is_cancel: data.is_cancel,
       total_days_rented: data.total_days_rented,
       is_finished: true,
+      phone_number: data.phone_number,
       total_price: data.total_price,
     };
     this.setState({ isDis: data.objectId });
